@@ -1,0 +1,13 @@
+/* Styles for the MedGemma analysis tab on the workflow page */
+.medgemmaAnalysis { padding: 1rem 0; line-height: 1.5; }
+.medgemmaAnalysis h3 { margin: 1.5rem 0 .5rem; }
+.medgemmaAnalysis table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
+.medgemmaAnalysis th, .medgemmaAnalysis td { text-align: left; vertical-align: top; padding: .4rem .6rem; border-bottom: 1px solid #ddd; }
+.medgemmaAnalysis th { width: 30%; font-weight: 600; }
+.medgemmaAnalysis__status { display: inline-block; padding: .1rem .5rem; border-radius: 3px; background: #eee; font-weight: 600; }
+.medgemmaAnalysis__status--done { background: #d4edda; }
+.medgemmaAnalysis__status--error { background: #f8d7da; }
+.medgemmaAnalysis__present { color: #1e6b30; }
+.medgemmaAnalysis__partial { color: #8a6100; }
+.medgemmaAnalysis__missing { color: #a4262c; font-weight: 600; }
+.medgemmaAnalysis__note { font-size: .875rem; color: #555; }

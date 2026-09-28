@@ -1,0 +1,219 @@
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "plugins.generic.medgemmaParser.displayName"
+msgstr "MedGemma Manuscript Analysis"
+
+msgid "plugins.generic.medgemmaParser.description"
+msgstr "Sends manuscripts uploaded by authors to a MedGemma model on AWS SageMaker and extracts metadata, clinical data and a pre-review checklist that editors see in the workflow."
+
+msgid "plugins.generic.medgemmaParser.tab"
+msgstr "AI analysis"
+
+msgid "plugins.generic.medgemmaParser.disclaimer"
+msgstr "Generated automatically by MedGemma and may contain errors. Always check them against the manuscript."
+
+msgid "plugins.generic.medgemmaParser.status.none"
+msgstr "No analysis is available for this submission."
+
+msgid "plugins.generic.medgemmaParser.status.pending"
+msgstr "Queued"
+
+msgid "plugins.generic.medgemmaParser.status.running"
+msgstr "Running"
+
+msgid "plugins.generic.medgemmaParser.status.done"
+msgstr "Completed"
+
+msgid "plugins.generic.medgemmaParser.status.error"
+msgstr "Error"
+
+msgid "plugins.generic.medgemmaParser.updated"
+msgstr "Last updated: {$date}"
+
+msgid "plugins.generic.medgemmaParser.truncated"
+msgstr "The manuscript exceeded the configured limit: only its beginning and end were analysed."
+
+msgid "plugins.generic.medgemmaParser.analyze"
+msgstr "Run analysis"
+
+msgid "plugins.generic.medgemmaParser.reanalyze"
+msgstr "Analyse again"
+
+msgid "plugins.generic.medgemmaParser.notConfigured"
+msgstr "The plugin is not configured. A journal manager must enter the AWS SageMaker details in the plugin settings."
+
+msgid "plugins.generic.medgemmaParser.rawJson"
+msgstr "Full JSON response"
+
+msgid "plugins.generic.medgemmaParser.section.metadata"
+msgstr "Metadata"
+
+msgid "plugins.generic.medgemmaParser.section.clinical"
+msgstr "Clinical data"
+
+msgid "plugins.generic.medgemmaParser.section.prereview"
+msgstr "Pre-review checks"
+
+msgid "plugins.generic.medgemmaParser.field.title"
+msgstr "Title"
+
+msgid "plugins.generic.medgemmaParser.field.authors"
+msgstr "Authors"
+
+msgid "plugins.generic.medgemmaParser.field.correspondingAuthor"
+msgstr "Corresponding author"
+
+msgid "plugins.generic.medgemmaParser.field.articleType"
+msgstr "Article type"
+
+msgid "plugins.generic.medgemmaParser.field.keywords"
+msgstr "Keywords"
+
+msgid "plugins.generic.medgemmaParser.field.abstract"
+msgstr "Abstract"
+
+msgid "plugins.generic.medgemmaParser.field.sections"
+msgstr "Sections"
+
+msgid "plugins.generic.medgemmaParser.field.referencesCount"
+msgstr "Number of references"
+
+msgid "plugins.generic.medgemmaParser.field.funding"
+msgstr "Funding"
+
+msgid "plugins.generic.medgemmaParser.field.studyDesign"
+msgstr "Study design"
+
+msgid "plugins.generic.medgemmaParser.field.population"
+msgstr "Population"
+
+msgid "plugins.generic.medgemmaParser.field.setting"
+msgstr "Setting"
+
+msgid "plugins.generic.medgemmaParser.field.sampleSize"
+msgstr "Sample size"
+
+msgid "plugins.generic.medgemmaParser.field.interventions"
+msgstr "Interventions"
+
+msgid "plugins.generic.medgemmaParser.field.comparators"
+msgstr "Comparators"
+
+msgid "plugins.generic.medgemmaParser.field.primary_outcomes"
+msgstr "Primary outcomes"
+
+msgid "plugins.generic.medgemmaParser.field.secondary_outcomes"
+msgstr "Secondary outcomes"
+
+msgid "plugins.generic.medgemmaParser.field.drugs"
+msgstr "Drugs"
+
+msgid "plugins.generic.medgemmaParser.field.mesh_terms"
+msgstr "MeSH terms (suggested)"
+
+msgid "plugins.generic.medgemmaParser.field.conditions"
+msgstr "Conditions (suggested ICD-10)"
+
+msgid "plugins.generic.medgemmaParser.field.followUp"
+msgstr "Follow-up"
+
+msgid "plugins.generic.medgemmaParser.field.trialRegistration"
+msgstr "Trial registration"
+
+msgid "plugins.generic.medgemmaParser.field.mainFindings"
+msgstr "Main findings"
+
+msgid "plugins.generic.medgemmaParser.field.reportingGuideline"
+msgstr "Reporting guideline"
+
+msgid "plugins.generic.medgemmaParser.field.ethics_approval"
+msgstr "Ethics approval"
+
+msgid "plugins.generic.medgemmaParser.field.informed_consent"
+msgstr "Informed consent"
+
+msgid "plugins.generic.medgemmaParser.field.conflicts_of_interest"
+msgstr "Conflicts of interest"
+
+msgid "plugins.generic.medgemmaParser.field.data_availability"
+msgstr "Data availability"
+
+msgid "plugins.generic.medgemmaParser.field.checklistItem"
+msgstr "Checklist item"
+
+msgid "plugins.generic.medgemmaParser.field.checklistStatus"
+msgstr "Status"
+
+msgid "plugins.generic.medgemmaParser.field.checklistEvidence"
+msgstr "Evidence in the text"
+
+msgid "plugins.generic.medgemmaParser.field.concerns"
+msgstr "Points to check"
+
+msgid "plugins.generic.medgemmaParser.settings.description"
+msgstr "Enter the details of the SageMaker endpoint hosting MedGemma. Use an IAM user that only has sagemaker:InvokeEndpoint on this endpoint."
+
+msgid "plugins.generic.medgemmaParser.settings.aws"
+msgstr "AWS SageMaker connection"
+
+msgid "plugins.generic.medgemmaParser.settings.awsRegion"
+msgstr "AWS region (e.g. eu-west-1)"
+
+msgid "plugins.generic.medgemmaParser.settings.awsRegion.invalid"
+msgstr "Enter a valid AWS region, for example eu-west-1."
+
+msgid "plugins.generic.medgemmaParser.settings.endpointName"
+msgstr "SageMaker endpoint name"
+
+msgid "plugins.generic.medgemmaParser.settings.endpointName.invalid"
+msgstr "The endpoint name may only contain letters, numbers and hyphens (max 63 characters)."
+
+msgid "plugins.generic.medgemmaParser.settings.awsAccessKeyId"
+msgstr "Access key ID"
+
+msgid "plugins.generic.medgemmaParser.settings.awsAccessKeyId.required"
+msgstr "The access key ID is required."
+
+msgid "plugins.generic.medgemmaParser.settings.awsSecretAccessKey"
+msgstr "Secret access key"
+
+msgid "plugins.generic.medgemmaParser.settings.awsSecretAccessKey.keep"
+msgstr "Secret access key (leave empty to keep the saved one)"
+
+msgid "plugins.generic.medgemmaParser.settings.awsSecretAccessKey.required"
+msgstr "The secret access key is required."
+
+msgid "plugins.generic.medgemmaParser.settings.payloadFormat"
+msgstr "Request format"
+
+msgid "plugins.generic.medgemmaParser.settings.payloadFormat.messages"
+msgstr "Chat \"messages\" (vLLM, TGI Messages API, JumpStart)"
+
+msgid "plugins.generic.medgemmaParser.settings.payloadFormat.inputs"
+msgstr "TGI \"inputs\" (Gemma prompt)"
+
+msgid "plugins.generic.medgemmaParser.settings.payloadFormat.invalid"
+msgstr "Choose a valid format."
+
+msgid "plugins.generic.medgemmaParser.settings.analysis"
+msgstr "Analysis"
+
+msgid "plugins.generic.medgemmaParser.settings.autoAnalyze"
+msgstr "Automatically analyse every new submission"
+
+msgid "plugins.generic.medgemmaParser.settings.maxInputChars"
+msgstr "Maximum characters sent to the model"
+
+msgid "plugins.generic.medgemmaParser.settings.maxOutputTokens"
+msgstr "Maximum tokens in the response"
+
+msgid "plugins.generic.medgemmaParser.settings.outputLanguage"
+msgstr "Language for findings and concerns (in English, e.g. Italian)"
+
+msgid "plugins.generic.medgemmaParser.settings.number.invalid"
+msgstr "Enter a valid whole number (at least 1000 characters and 256 tokens)."

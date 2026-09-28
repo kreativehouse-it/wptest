@@ -1,0 +1,219 @@
+msgid ""
+msgstr ""
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "plugins.generic.medgemmaParser.displayName"
+msgstr "Analisi manoscritti MedGemma"
+
+msgid "plugins.generic.medgemmaParser.description"
+msgstr "Invia i manoscritti caricati dagli autori a un modello MedGemma su AWS SageMaker ed estrae metadati, dati clinici e una checklist di pre-review, visibili agli editor nel workflow."
+
+msgid "plugins.generic.medgemmaParser.tab"
+msgstr "Analisi AI"
+
+msgid "plugins.generic.medgemmaParser.disclaimer"
+msgstr "Risultati generati automaticamente da MedGemma: possono contenere errori. Verificali sempre sul manoscritto."
+
+msgid "plugins.generic.medgemmaParser.status.none"
+msgstr "Nessuna analisi disponibile per questa submission."
+
+msgid "plugins.generic.medgemmaParser.status.pending"
+msgstr "In coda"
+
+msgid "plugins.generic.medgemmaParser.status.running"
+msgstr "In corso"
+
+msgid "plugins.generic.medgemmaParser.status.done"
+msgstr "Completata"
+
+msgid "plugins.generic.medgemmaParser.status.error"
+msgstr "Errore"
+
+msgid "plugins.generic.medgemmaParser.updated"
+msgstr "Ultimo aggiornamento: {$date}"
+
+msgid "plugins.generic.medgemmaParser.truncated"
+msgstr "Il manoscritto era più lungo del limite impostato: è stata analizzata solo la parte iniziale e finale."
+
+msgid "plugins.generic.medgemmaParser.analyze"
+msgstr "Avvia analisi"
+
+msgid "plugins.generic.medgemmaParser.reanalyze"
+msgstr "Rianalizza"
+
+msgid "plugins.generic.medgemmaParser.notConfigured"
+msgstr "Il plugin non è configurato. Un journal manager deve inserire i dati di AWS SageMaker nelle impostazioni del plugin."
+
+msgid "plugins.generic.medgemmaParser.rawJson"
+msgstr "Risposta JSON completa"
+
+msgid "plugins.generic.medgemmaParser.section.metadata"
+msgstr "Metadati"
+
+msgid "plugins.generic.medgemmaParser.section.clinical"
+msgstr "Dati clinici"
+
+msgid "plugins.generic.medgemmaParser.section.prereview"
+msgstr "Check pre-review"
+
+msgid "plugins.generic.medgemmaParser.field.title"
+msgstr "Titolo"
+
+msgid "plugins.generic.medgemmaParser.field.authors"
+msgstr "Autori"
+
+msgid "plugins.generic.medgemmaParser.field.correspondingAuthor"
+msgstr "Autore corrispondente"
+
+msgid "plugins.generic.medgemmaParser.field.articleType"
+msgstr "Tipo di articolo"
+
+msgid "plugins.generic.medgemmaParser.field.keywords"
+msgstr "Parole chiave"
+
+msgid "plugins.generic.medgemmaParser.field.abstract"
+msgstr "Abstract"
+
+msgid "plugins.generic.medgemmaParser.field.sections"
+msgstr "Sezioni"
+
+msgid "plugins.generic.medgemmaParser.field.referencesCount"
+msgstr "Numero di riferimenti"
+
+msgid "plugins.generic.medgemmaParser.field.funding"
+msgstr "Finanziamenti"
+
+msgid "plugins.generic.medgemmaParser.field.studyDesign"
+msgstr "Disegno dello studio"
+
+msgid "plugins.generic.medgemmaParser.field.population"
+msgstr "Popolazione"
+
+msgid "plugins.generic.medgemmaParser.field.setting"
+msgstr "Setting"
+
+msgid "plugins.generic.medgemmaParser.field.sampleSize"
+msgstr "Dimensione del campione"
+
+msgid "plugins.generic.medgemmaParser.field.interventions"
+msgstr "Interventi"
+
+msgid "plugins.generic.medgemmaParser.field.comparators"
+msgstr "Comparatori"
+
+msgid "plugins.generic.medgemmaParser.field.primary_outcomes"
+msgstr "Outcome primari"
+
+msgid "plugins.generic.medgemmaParser.field.secondary_outcomes"
+msgstr "Outcome secondari"
+
+msgid "plugins.generic.medgemmaParser.field.drugs"
+msgstr "Farmaci"
+
+msgid "plugins.generic.medgemmaParser.field.mesh_terms"
+msgstr "Termini MeSH (suggeriti)"
+
+msgid "plugins.generic.medgemmaParser.field.conditions"
+msgstr "Patologie (ICD-10 suggerito)"
+
+msgid "plugins.generic.medgemmaParser.field.followUp"
+msgstr "Follow-up"
+
+msgid "plugins.generic.medgemmaParser.field.trialRegistration"
+msgstr "Registrazione del trial"
+
+msgid "plugins.generic.medgemmaParser.field.mainFindings"
+msgstr "Risultati principali"
+
+msgid "plugins.generic.medgemmaParser.field.reportingGuideline"
+msgstr "Linea guida di reporting"
+
+msgid "plugins.generic.medgemmaParser.field.ethics_approval"
+msgstr "Approvazione etica"
+
+msgid "plugins.generic.medgemmaParser.field.informed_consent"
+msgstr "Consenso informato"
+
+msgid "plugins.generic.medgemmaParser.field.conflicts_of_interest"
+msgstr "Conflitti di interesse"
+
+msgid "plugins.generic.medgemmaParser.field.data_availability"
+msgstr "Disponibilità dei dati"
+
+msgid "plugins.generic.medgemmaParser.field.checklistItem"
+msgstr "Voce della checklist"
+
+msgid "plugins.generic.medgemmaParser.field.checklistStatus"
+msgstr "Stato"
+
+msgid "plugins.generic.medgemmaParser.field.checklistEvidence"
+msgstr "Evidenza nel testo"
+
+msgid "plugins.generic.medgemmaParser.field.concerns"
+msgstr "Punti da verificare"
+
+msgid "plugins.generic.medgemmaParser.settings.description"
+msgstr "Inserisci i dati dell'endpoint SageMaker che ospita MedGemma. Usa un utente IAM con il solo permesso sagemaker:InvokeEndpoint su questo endpoint."
+
+msgid "plugins.generic.medgemmaParser.settings.aws"
+msgstr "Connessione AWS SageMaker"
+
+msgid "plugins.generic.medgemmaParser.settings.awsRegion"
+msgstr "Regione AWS (es. eu-west-1)"
+
+msgid "plugins.generic.medgemmaParser.settings.awsRegion.invalid"
+msgstr "Inserisci una regione AWS valida, ad esempio eu-west-1."
+
+msgid "plugins.generic.medgemmaParser.settings.endpointName"
+msgstr "Nome dell'endpoint SageMaker"
+
+msgid "plugins.generic.medgemmaParser.settings.endpointName.invalid"
+msgstr "Il nome dell'endpoint può contenere solo lettere, numeri e trattini (max 63 caratteri)."
+
+msgid "plugins.generic.medgemmaParser.settings.awsAccessKeyId"
+msgstr "Access key ID"
+
+msgid "plugins.generic.medgemmaParser.settings.awsAccessKeyId.required"
+msgstr "L'access key ID è obbligatoria."
+
+msgid "plugins.generic.medgemmaParser.settings.awsSecretAccessKey"
+msgstr "Secret access key"
+
+msgid "plugins.generic.medgemmaParser.settings.awsSecretAccessKey.keep"
+msgstr "Secret access key (lascia vuoto per mantenere quella salvata)"
+
+msgid "plugins.generic.medgemmaParser.settings.awsSecretAccessKey.required"
+msgstr "La secret access key è obbligatoria."
+
+msgid "plugins.generic.medgemmaParser.settings.payloadFormat"
+msgstr "Formato della richiesta"
+
+msgid "plugins.generic.medgemmaParser.settings.payloadFormat.messages"
+msgstr "Chat \"messages\" (vLLM, TGI Messages API, JumpStart)"
+
+msgid "plugins.generic.medgemmaParser.settings.payloadFormat.inputs"
+msgstr "TGI \"inputs\" (prompt Gemma)"
+
+msgid "plugins.generic.medgemmaParser.settings.payloadFormat.invalid"
+msgstr "Scegli un formato valido."
+
+msgid "plugins.generic.medgemmaParser.settings.analysis"
+msgstr "Analisi"
+
+msgid "plugins.generic.medgemmaParser.settings.autoAnalyze"
+msgstr "Analizza automaticamente ogni nuova submission"
+
+msgid "plugins.generic.medgemmaParser.settings.maxInputChars"
+msgstr "Caratteri massimi inviati al modello"
+
+msgid "plugins.generic.medgemmaParser.settings.maxOutputTokens"
+msgstr "Token massimi nella risposta"
+
+msgid "plugins.generic.medgemmaParser.settings.outputLanguage"
+msgstr "Lingua di sintesi e osservazioni (in inglese, es. Italian)"
+
+msgid "plugins.generic.medgemmaParser.settings.number.invalid"
+msgstr "Inserisci un numero intero valido (almeno 1000 caratteri e 256 token)."
