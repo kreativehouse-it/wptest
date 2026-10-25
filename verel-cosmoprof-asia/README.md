@@ -28,3 +28,10 @@ Cartella `piano-appuntamenti/`:
 - `02-piano-giorno-per-giorno.md`: slot, sequenze per segmento, calendario 26/10-20/11, obiettivi e checkpoint.
 - `03-template-messaggi.md`: email e LinkedIn in inglese per segmento, varianti per punto di differenza.
 - `04-domande-aperte.md`: decisioni bloccanti, contenuti, retailer, budget, domande per organizzatore e ICE.
+- `05-integrazione-drive.md`: cosa si adotta dal Drive (COSMOPACK-Hong Kong), correzioni ai vincoli, liste di lavoro S1/S2/S3.
+
+## App Radar Clienti (25/10/2026)
+`app/radar-clienti.html`, pubblicata come artifact privato su claude.ai. Pipeline condivisa (49 aziende a livello azienda,
+nessun dato personale), qualifica di nuovi prospect secondo i criteri di Eugenio con bozza opzionale di Claude,
+generatore di messaggi con controllo dei vincoli (solari, campioni, tono), agenda di Hong Kong, canali per nuovi clienti,
+esportazione CSV per Apollo.

@@ -1,0 +1,843 @@
+<title>Radar Clienti Verel</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: banco di laboratorio. Barra in alto con conto alla rovescia e obiettivi, schede di lavoro, pannello laterale per la scheda azienda. */
+:root {
+  --bg: #f3f5f3;
+  --surface: #ffffff;
+  --surface-2: #e9eeeb;
+  --ink: #16201c;
+  --ink-2: #4b5a54;
+  --line: #d3dcd7;
+  --accent: #0d6b5a;
+  --accent-ink: #ffffff;
+  --accent-soft: #d6ece6;
+  --good: #2e7d4f;
+  --good-soft: #dcefe3;
+  --warn: #9a6200;
+  --warn-soft: #f6ead2;
+  --bad: #b3261e;
+  --bad-soft: #f6dcda;
+  --info-soft: #dfe7f3;
+  --info: #2d4f86;
+  --font-display: "Familjen Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", Roboto, Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --radius: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1513; --surface: #161e1b; --surface-2: #1d2724; --ink: #e4ebe8; --ink-2: #9fb0a9; --line: #2c3934;
+    --accent: #4cc2a5; --accent-ink: #062019; --accent-soft: #173a32;
+    --good: #6fcf97; --good-soft: #17352a; --warn: #e5b45a; --warn-soft: #3a2f17; --bad: #f08a83; --bad-soft: #3d1d1b;
+    --info-soft: #1c2a40; --info: #9dbbe9; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1513; --surface: #161e1b; --surface-2: #1d2724; --ink: #e4ebe8; --ink-2: #9fb0a9; --line: #2c3934;
+  --accent: #4cc2a5; --accent-ink: #062019; --accent-soft: #173a32;
+  --good: #6fcf97; --good-soft: #17352a; --warn: #e5b45a; --warn-soft: #3a2f17; --bad: #f08a83; --bad-soft: #3d1d1b;
+  --info-soft: #1c2a40; --info: #9dbbe9; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 14px; line-height: 1.5; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
+.wrap { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); max-width: 1280px; margin: 0 auto; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+h1 { font-size: 22px; font-weight: 700; }
+h2 { font-size: 18px; font-weight: 600; }
+h3 { font-size: 15px; font-weight: 600; }
+p { margin: 0; }
+.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.muted { color: var(--ink-2); }
+.small { font-size: 12px; }
+.eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2); }
+
+header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--surface); border-bottom: 1px solid var(--line); }
+.top-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding-block: 12px; }
+.brand { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.count { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+.count .t { font-family: var(--font-display); font-size: 26px; font-weight: 700; color: var(--accent); line-height: 1; }
+nav.tabs { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: none; }
+nav.tabs button { flex: none; border: 1px solid transparent; background: transparent; color: var(--ink-2); padding: 6px 12px; border-radius: 999px; font: 500 13px var(--font-body); cursor: pointer; }
+nav.tabs button[aria-selected="true"] { background: var(--accent); color: var(--accent-ink); }
+nav.tabs button:hover:not([aria-selected="true"]) { background: var(--surface-2); color: var(--ink); }
+button:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+main { padding-block: 20px 60px; display: grid; gap: 20px; }
+section[hidden] { display: none; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; min-width: 0; }
+.grid-2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 860px) { .grid-2, .grid-3 { grid-template-columns: minmax(0, 1fr); } }
+.stack { display: grid; gap: 12px; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+
+/* KPI */
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 860px) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.kpi { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; display: grid; gap: 6px; min-width: 0; }
+.kpi .v { font-family: var(--font-display); font-size: 28px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+.bar { position: relative; height: 8px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
+.bar i { position: absolute; inset: 0 auto 0 0; background: var(--accent); border-radius: 999px; }
+.bar b { position: absolute; top: -2px; bottom: -2px; width: 2px; background: var(--ink-2); }
+
+/* Controls */
+input[type="text"], input[type="number"], input[type="search"], select, textarea {
+  width: 100%; min-width: 0; font: 14px var(--font-body); color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px;
+}
+textarea { resize: vertical; min-height: 80px; }
+label.f { display: grid; gap: 4px; font-size: 12px; color: var(--ink-2); font-weight: 500; min-width: 0; }
+.btn { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); padding: 7px 12px; border-radius: 8px; font: 500 13px var(--font-body); cursor: pointer; }
+.btn:hover { background: var(--surface-2); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn.primary:hover { filter: brightness(1.08); }
+.btn:disabled { opacity: .55; cursor: not-allowed; }
+.check { display: inline-flex; gap: 6px; align-items: center; font-size: 13px; }
+
+/* Chips */
+.chip { display: inline-flex; align-items: center; gap: 4px; padding: 1px 8px; border-radius: 999px; font: 500 12px var(--font-body); background: var(--surface-2); color: var(--ink-2); white-space: nowrap; }
+.chip.A { background: var(--accent); color: var(--accent-ink); }
+.chip.B { background: var(--accent-soft); color: var(--accent); }
+.chip.C { background: var(--surface-2); color: var(--ink-2); }
+.chip.good { background: var(--good-soft); color: var(--good); }
+.chip.warn { background: var(--warn-soft); color: var(--warn); }
+.chip.bad { background: var(--bad-soft); color: var(--bad); }
+.chip.info { background: var(--info-soft); color: var(--info); }
+.seg { font-family: var(--font-mono); font-size: 11px; padding: 1px 6px; border: 1px solid var(--line); border-radius: 4px; color: var(--ink-2); }
+
+/* Table */
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+table { width: 100%; border-collapse: collapse; min-width: 760px; }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font: 500 11px var(--font-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); background: var(--surface-2); position: sticky; top: 0; }
+tbody tr { cursor: pointer; }
+tbody tr:hover { background: var(--surface-2); }
+tbody tr:last-child td { border-bottom: 0; }
+td .name { font-weight: 600; }
+.empty { padding: 28px; text-align: center; color: var(--ink-2); display: grid; gap: 8px; justify-items: center; }
+
+/* Drawer */
+.scrim { position: fixed; inset: 0; background: rgba(10, 20, 16, .35); z-index: 20; }
+.drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(520px, 100%); background: var(--surface); border-left: 1px solid var(--line); z-index: 21; overflow-y: auto;
+  padding: calc(16px + env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) calc(24px + env(safe-area-inset-bottom, 0px)) 16px; display: grid; gap: 14px; align-content: start; }
+.drawer .head { display: flex; justify-content: space-between; gap: 12px; align-items: start; }
+.kv { display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 6px 12px; font-size: 13px; }
+.kv dt { color: var(--ink-2); }
+.kv dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.form-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
+.form-grid .full { grid-column: 1 / -1; }
+@media (max-width: 520px) { .form-grid { grid-template-columns: minmax(0, 1fr); } .kv { grid-template-columns: minmax(0, 1fr); } }
+
+/* Qualify */
+.verdict { border-radius: var(--radius); padding: 14px; display: grid; gap: 8px; border: 1px solid var(--line); }
+.verdict.A { background: var(--accent-soft); border-color: var(--accent); }
+.verdict.B { background: var(--info-soft); }
+.verdict.C { background: var(--surface-2); }
+.verdict.X { background: var(--bad-soft); border-color: var(--bad); }
+.verdict .big { font-family: var(--font-display); font-size: 34px; font-weight: 700; line-height: 1; }
+ul.reasons { margin: 0; padding-left: 18px; display: grid; gap: 3px; }
+.ai-out { background: var(--surface-2); border-radius: 8px; padding: 12px; font-size: 13px; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+/* Messages */
+.msg-out { font-family: var(--font-body); white-space: pre-wrap; background: var(--surface-2); border-radius: 8px; padding: 14px; min-height: 160px; overflow-wrap: anywhere; }
+.msg-out mark { background: var(--warn-soft); color: var(--warn); border-radius: 3px; padding: 0 2px; }
+.issues { display: grid; gap: 6px; }
+.issue { display: flex; gap: 8px; align-items: baseline; font-size: 13px; }
+
+/* Agenda */
+.days { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 960px) { .days { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .days { grid-template-columns: minmax(0, 1fr); } }
+.day { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.day .slot { display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 8px; padding: 8px; border-radius: 8px; background: var(--surface-2); cursor: pointer; }
+.day .slot:hover { outline: 1px solid var(--accent); }
+.cap { font-size: 12px; color: var(--ink-2); }
+
+/* Channels */
+.chan { display: grid; grid-template-columns: minmax(0, 1fr) 170px; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.chan:last-child { border-bottom: 0; }
+@media (max-width: 600px) { .chan { grid-template-columns: minmax(0, 1fr); } }
+
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(20px + env(safe-area-inset-bottom, 0px)); background: var(--ink); color: var(--bg); padding: 8px 14px; border-radius: 8px; z-index: 30; font-size: 13px; }
+.notice { display: flex; gap: 10px; align-items: baseline; padding: 10px 12px; border-radius: 8px; background: var(--warn-soft); color: var(--warn); font-size: 13px; }
+.notice.info { background: var(--info-soft); color: var(--info); }
+@media (prefers-reduced-motion: no-preference) { .drawer { animation: slide .18s ease-out; } @keyframes slide { from { transform: translateX(24px); opacity: .6; } } }
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="top-row">
+      <div class="brand">
+        <h1>Radar Clienti Verel</h1>
+        <span class="eyebrow">Cosmopack Asia · AWE 10-12/11 · Cosmoprof Asia · HKCEC 11-13/11</span>
+      </div>
+      <div class="count">
+        <div><div class="t mono" id="countdown">T-16</div><div class="eyebrow">giorni a Cosmopack</div></div>
+        <div><div class="t mono" id="hkclock">--:--</div><div class="eyebrow">ora di Hong Kong</div></div>
+      </div>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Sezioni">
+      <button role="tab" id="tab-pipeline" aria-selected="true" data-view="pipeline">Pipeline</button>
+      <button role="tab" id="tab-qualifica" aria-selected="false" data-view="qualifica">Qualifica un prospect</button>
+      <button role="tab" id="tab-messaggi" aria-selected="false" data-view="messaggi">Messaggi</button>
+      <button role="tab" id="tab-agenda" aria-selected="false" data-view="agenda">Agenda Hong Kong</button>
+      <button role="tab" id="tab-canali" aria-selected="false" data-view="canali">Canali per nuovi clienti</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="notice info" id="db-notice" hidden></div>
+
+  <!-- PIPELINE -->
+  <section id="view-pipeline" class="stack" aria-labelledby="tab-pipeline">
+    <div class="kpis" id="kpis"></div>
+    <div class="panel stack">
+      <div class="row" style="justify-content: space-between">
+        <h2>Aziende in lavorazione</h2>
+        <div class="row">
+          <button class="btn" id="btn-export" hidden>Esporta CSV per Apollo</button>
+          <button class="btn primary" id="btn-new">Nuovo prospect</button>
+        </div>
+      </div>
+      <div class="row" style="gap: 10px">
+        <label class="f" style="flex: 2 1 220px">Cerca<input type="search" id="f-q" placeholder="Azienda, paese, stand…"></label>
+        <label class="f" style="flex: 1 1 120px">Segmento<select id="f-seg"><option value="">Tutti</option><option value="S1">S1 · Brand espositori</option><option value="S2">S2 · Retailer ≥500 PV</option><option value="S3">S3 · Brand APAC</option></select></label>
+        <label class="f" style="flex: 1 1 100px">Priorità<select id="f-pri"><option value="">Tutte</option><option>A</option><option>B</option><option>C</option></select></label>
+        <label class="f" style="flex: 1 1 150px">Stato<select id="f-status"><option value="">Tutti</option></select></label>
+        <label class="check" style="flex: 1 1 160px; align-self: end; padding-bottom: 8px"><input type="checkbox" id="f-alert"> Solo con avvisi</label>
+      </div>
+    </div>
+    <div class="table-wrap" id="table-wrap"></div>
+    <p class="small muted">Qui niente email o nomi di persone: i contatti restano nel file Drive 05, in Apollo e in MailUp. L'app registra solo aziende, ruoli e stato.</p>
+  </section>
+
+  <!-- QUALIFICA -->
+  <section id="view-qualifica" class="grid-2" hidden aria-labelledby="tab-qualifica">
+    <div class="panel stack">
+      <div class="stack" style="gap: 4px">
+        <h2>Il prospect rientra nei criteri di Eugenio?</h2>
+        <p class="muted small">Compila quello che sai. Il verdetto si aggiorna mentre scrivi. Con "Chiedi a Claude" ottieni una prima bozza da verificare su Apollo e sui registri.</p>
+      </div>
+      <div class="form-grid">
+        <label class="f full">Nome azienda o brand<input type="text" id="q-name" placeholder="es. Banobagi"></label>
+        <label class="f">Sito<input type="text" id="q-site" placeholder="es. banobagicosmetic.com"></label>
+        <label class="f">Paese<input type="text" id="q-country" placeholder="es. KR"></label>
+        <label class="f">Tipo<select id="q-type"><option value="brand">Brand B2C</option><option value="retailer">Retailer</option></select></label>
+        <label class="f">Espositore a Cosmoprof Asia?<select id="q-exh"><option value="si">Sì</option><option value="no">No</option><option value="ignoto">Non so</option></select></label>
+        <label class="f">Categoria principale<select id="q-cat"><option value="skin">Skincare</option><option value="hair">Haircare</option><option value="oral">Oral care</option><option value="sun">Solari (prevalenti)</option><option value="makeup">Make-up / profumi</option><option value="altro">Altro</option></select></label>
+        <label class="f">Fatturato stimato (M€)<input type="number" id="q-rev" min="0" step="0.1" placeholder="vuoto se non noto"></label>
+        <label class="f">Fonte del fatturato<select id="q-revsrc"><option value="bilancio">Bilancio / registro</option><option value="portale">Portale da bilancio / stampa</option><option value="dichiarato">Dichiarato dall'azienda</option><option value="ignoto" selected>Nessuna fonte</option></select></label>
+        <label class="f">Posizionamento<select id="q-pos"><option value="premium">Premium</option><option value="medioalto">Medio-alto</option><option value="medio" selected>Medio</option><option value="mass">Mass</option></select></label>
+        <label class="f">Produzione<select id="q-prod"><option value="terzista">Terzisti</option><option value="mista">Mista</option><option value="inhouse">Fabbrica propria</option><option value="ignota" selected>Non nota</option></select></label>
+        <label class="f">Proprietà<select id="q-own"><option value="indip">Indipendente</option><option value="piccolo">Gruppo piccolo / familiare / clinico</option><option value="grande">Grande gruppo / conglomerato</option></select></label>
+        <label class="f" id="q-pv-wrap" hidden>Punti vendita<input type="number" id="q-pv" min="0" step="1"></label>
+        <label class="check full"><input type="checkbox" id="q-ing"> Comunica tecnologie, ingredienti o clean label</label>
+        <label class="check full"><input type="checkbox" id="q-launch"> Lancia spesso nuovi prodotti</label>
+        <label class="check full"><input type="checkbox" id="q-nord"> Nessun R&amp;D interno evidente</label>
+        <label class="check full"><input type="checkbox" id="q-eu"> Vende o sta entrando in Europa / UK</label>
+        <label class="f full">Note<textarea id="q-notes" placeholder="Cosa sai del brand, da dove viene il dato…"></textarea></label>
+      </div>
+      <div class="row">
+        <button class="btn" id="q-ai" hidden>Chiedi a Claude una bozza</button>
+        <button class="btn" id="q-reset">Svuota</button>
+      </div>
+      <div id="q-ai-out" class="stack" hidden></div>
+    </div>
+    <div class="stack">
+      <div id="verdict" class="verdict C"></div>
+      <div class="panel stack">
+        <h3>Esclusioni vincolanti</h3>
+        <p class="small muted">Grandi gruppi o in dismissione: Medik8, Elemis, Ole Henriksen, ESPA, REN. Produzione propria: Weleda, Lavera, Dr. Hauschka, Annemarie Börlind, Ringana, Babor, MADARA, Lumene. Clienti e prospect attivi: TOCG (Dr. Organic, Satin Naturel, La Saponaria, Hairlust), Davines, Irene Forte, Lung Fung.</p>
+        <p class="small muted">Ruoli da contattare: founder, R&amp;D, marketing prodotto. Mai supply chain o operations.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MESSAGGI -->
+  <section id="view-messaggi" class="grid-2" hidden aria-labelledby="tab-messaggi">
+    <div class="panel stack">
+      <h2>Prepara il messaggio</h2>
+      <div class="form-grid">
+        <label class="f full">Azienda<select id="m-company"></select></label>
+        <label class="f full">Modello<select id="m-tpl"></select></label>
+        <label class="f">Nome di battesimo<input type="text" id="m-first" placeholder="non viene salvato"></label>
+        <label class="f">Chi firma<input type="text" id="m-sender" placeholder="es. Eugenio, Verel"></label>
+        <label class="f full">Osservazione specifica sull'azienda<textarea id="m-obs" placeholder="Un prodotto, un lancio, un mercato. Senza questa frase il messaggio non va inviato."></textarea></label>
+        <label class="f">Slot 1<input type="text" id="m-slot1" placeholder="Wed 11 Nov, 10:00"></label>
+        <label class="f">Slot 2<input type="text" id="m-slot2" placeholder="Fri 13 Nov, 13:30"></label>
+        <label class="f full">Link landing<input type="text" id="m-link" placeholder="[LANDING URL]"></label>
+      </div>
+      <p class="small muted">Nome e osservazione restano solo in questa pagina mentre la usi. Diego incolla il testo in Apollo o Gmail.</p>
+    </div>
+    <div class="stack">
+      <div class="panel stack">
+        <div class="row" style="justify-content: space-between"><h3 id="m-subject-h">Testo</h3><button class="btn primary" id="m-copy">Copia testo</button></div>
+        <div class="msg-out" id="m-out" aria-live="polite"></div>
+        <p class="small mono muted" id="m-count"></p>
+      </div>
+      <div class="panel stack">
+        <h3>Controllo vincoli</h3>
+        <div class="issues" id="m-issues"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AGENDA -->
+  <section id="view-agenda" class="stack" hidden aria-labelledby="tab-agenda">
+    <div class="row" style="justify-content: space-between">
+      <h2>Agenda di Hong Kong</h2>
+      <p class="small muted">Un appuntamento conta solo se è confermato per iscritto e ricontrollato 24 ore prima.</p>
+    </div>
+    <div class="days" id="days"></div>
+    <div class="panel stack" id="agenda-warn"></div>
+  </section>
+
+  <!-- CANALI -->
+  <section id="view-canali" class="grid-2" hidden aria-labelledby="tab-canali">
+    <div class="panel">
+      <h2 style="margin-bottom: 4px">Dove trovare nuovi clienti</h2>
+      <p class="small muted" style="margin-bottom: 8px">Canali verificati per la fiera 2026 e leve di Verel. Lo stato è condiviso con chi usa l'app.</p>
+      <div id="channels"></div>
+    </div>
+    <div class="stack">
+      <div class="panel stack">
+        <h3>Ritmo della sequenza</h3>
+        <div class="kv" style="grid-template-columns: 92px minmax(0,1fr)">
+          <dt class="mono">26-27/10</dt><dd>Collegamento LinkedIn (Eugenio o R&amp;D) e Email 1 alle A</dd>
+          <dt class="mono">28/10</dt><dd>Email 1 alle B, ai retailer e awareness 1 al segmento 3</dd>
+          <dt class="mono">29-30/10</dt><dd>Messaggio LinkedIn a chi ha accettato</dd>
+          <dt class="mono">2-3/11</dt><dd>Email 2 con slot concreti · checkpoint ≥ 4 confermati</dd>
+          <dt class="mono">5/11</dt><dd>Email 3 "ultimi slot" · checkpoint ≥ 8 confermati</dd>
+          <dt class="mono">9-13/11</dt><dd>Conferme 24h · "oggi siamo nel vostro padiglione" una sola volta</dd>
+          <dt class="mono">16-20/11</dt><dd>Seguito entro 72h, nota "What we saw in Hong Kong", call di 20 minuti</dd>
+        </div>
+        <p class="small muted">Invii programmati in Apollo nell'ora locale del destinatario, 8:30-10:00. Hong Kong è a +7 ore dall'Italia, Corea e Giappone a +8.</p>
+      </div>
+      <div class="panel stack">
+        <h3>Cosa non dire mai</h3>
+        <ul class="reasons small">
+          <li>Niente solari: Verel non li produce ancora.</li>
+          <li>Niente campioni nei messaggi: solo su richiesta, con un interesse concreto.</li>
+          <li>Niente tono da venditori: niente "free", offerte, superlativi.</li>
+          <li>Time to market 6-8 settimane solo dopo conferma interna.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" hidden aria-label="Scheda azienda"></aside>
+<div class="toast" id="toast" hidden role="status"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---------- Constants ----------
+  const STATUSES = ["Da contattare", "Contattato", "Ha risposto", "Slot proposto", "Confermato", "Svolto", "Follow-up post-fiera", "Non interessato", "In attesa di Eugenio", "Escluso"];
+  const CONFIRMED = new Set(["Confermato", "Svolto"]);
+  const TARGETS = { S1: { base: 8, stretch: 12 }, S2: { base: 2, stretch: 4 }, S3: { base: 1, stretch: 3 } };
+  const SEG_LABEL = { S1: "Brand espositori", S2: "Retailer ≥500 PV", S3: "Brand APAC" };
+  const HOOKS = { A: "Attivi proprietari + Univ. Parma", B: "Time to market 6-8 sett. (da confermare)", C: "Supporto marketing e trend", D: "Made in Italy / export UE" };
+  const DAYS = [
+    { key: "2026-11-09", label: "Lun 9/11", note: "Arrivo, allestimento", cap: "0-1 slot" },
+    { key: "2026-11-10", label: "Mar 10/11", note: "Stand AWE · BIFA · Elite Circle", cap: "10-12 slot" },
+    { key: "2026-11-11", label: "Mer 11/11", note: "HKCEC (E + R) · stand AWE", cap: "12-16 slot" },
+    { key: "2026-11-12", label: "Gio 12/11", note: "Sedi invertite", cap: "12-16 slot" },
+    { key: "2026-11-13", label: "Ven 13/11", note: "Tutti all'HKCEC", cap: "12-14 slot" },
+    { key: "seoul", label: "Seul 16-18/11", note: "Solo se confermata", cap: "3-6 slot" },
+    { key: "remote", label: "Call post-fiera", note: "Entro il 20/11", cap: "—" }
+  ];
+  const VENUES = ["Stand Verel · AWE", "Stand del target · HKCEC", "Grand Hyatt (colazione)", "Sede del target", "Video call", "Altro"];
+  const EXCLUDED = [
+    ["medik8", "grande gruppo"], ["elemis", "grande gruppo"], ["ole henriksen", "grande gruppo"], ["espa", "grande gruppo"], ["ren", "in dismissione"],
+    ["weleda", "produzione propria"], ["lavera", "produzione propria"], ["dr hauschka", "produzione propria"], ["annemarie borlind", "produzione propria"],
+    ["ringana", "produzione propria"], ["babor", "produzione propria"], ["madara", "produzione propria"], ["lumene", "produzione propria"],
+    ["tocg", "cliente / prospect attivo"], ["dr organic", "cliente / prospect attivo (TOCG)"], ["satin naturel", "cliente / prospect attivo (TOCG)"],
+    ["la saponaria", "cliente / prospect attivo (TOCG)"], ["hairlust", "cliente / prospect attivo (TOCG)"], ["davines", "cliente / prospect attivo"],
+    ["irene forte", "cliente / prospect attivo"], ["lung fung", "già cliente Verel"],
+    ["amorepacific", "conglomerato [Inferenza]"], ["lg household", "conglomerato [Inferenza]"], ["shiseido", "conglomerato [Inferenza]"], ["kao", "conglomerato [Inferenza]"],
+    ["kose", "conglomerato [Inferenza]"], ["pola orbis", "conglomerato [Inferenza]"], ["loreal", "conglomerato [Inferenza]"], ["estee lauder", "conglomerato [Inferenza]"],
+    ["unilever", "conglomerato [Inferenza]"], ["beiersdorf", "conglomerato [Inferenza]"], ["sasa", "retailer sotto i 500 PV"], ["mannings", "retailer sotto i 500 PV"]
+  ];
+
+  const TEMPLATES = [
+    { id: "s1a", seg: "S1", name: "S1 · Email 1 · Attivi proprietari", subject: "{{company}} × Italian botanical actives, Hong Kong 11–13 Nov",
+      body: "Hi {{first_name}},\n\n{{observation}}\n\nVerel is an Italian formulator. Our R&D develops proprietary botanical actives, clinically validated with the University of Parma, for brands that build their story on ingredients.\n\nWe've prepared a one-page read of your range against three formulation trends we see coming to APAC. We'd like to walk you through it at your booth: 15 minutes, at a time that won't take you away from your buyers.\n\nWould {{slot_1}} or {{slot_2}} work? Pick a slot here: {{link}}\n\n{{sender}}" },
+    { id: "s1b", seg: "S1", name: "S1 · Email 1 · Time to market (sospesa)", subject: "From brief to shelf in 6–8 weeks, 15 min at your booth?",
+      body: "Hi {{first_name}},\n\n{{observation}}\n\nVerel formulates and manufactures in Italy, with a time to market of 6–8 weeks from approved brief, and our own R&D creates the actives.\n\nWe'll be at Cosmoprof Asia (HKCEC) 11–13 Nov. I'd like 15 minutes at your booth to show you one formula concept we sketched for {{company}}.\n\nWould {{slot_1}} or {{slot_2}} work? {{link}}\n\n{{sender}}" },
+    { id: "s1c", seg: "S1", name: "S1 · Email 1 · Supporto marketing", subject: "Three formula ideas for {{company}}",
+      body: "Hi {{first_name}},\n\n{{observation}}\n\nAt Verel, an Italian formulator, our R&D and marketing teams propose trends, products and formulas to the brands we work with, not just production.\n\nWe've put three ideas for {{company}} on one page. I'd like to leave it with you at your booth in Hong Kong: 15 minutes on 11, 12 or 13 Nov.\n\nWhich day suits you? {{link}}\n\n{{sender}}" },
+    { id: "s1d", seg: "S1", name: "S1 · Email 1 · Made in Italy / UE", subject: "{{company}}'s next step in Europe, Italy is Country of Honour in HK",
+      body: "Hi {{first_name}},\n\n{{observation}}\n\nItaly is Country of Honour at Cosmoprof Asia this year. Verel is part of the Italian delegation: we formulate and produce in Italy with proprietary botanical actives, for brands growing in Europe.\n\n15 minutes at your booth on 11–13 Nov to discuss what a Made-in-Italy line could look like for {{company}}?\n\nPick a slot: {{link}}\n\n{{sender}}" },
+    { id: "e2", seg: "S1", name: "S1 · Email 2 · Slot concreti", subject: "Re: Hong Kong, {{company}}",
+      body: "Hi {{first_name}},\n\nOne line from the page we prepared for you: \"{{observation}}\".\n\nThe rest is better in person. I'll be in Hall {{hall}} on:\n- {{slot_1}}\n- {{slot_2}}\n\nReply with 1 or 2, and I'll come to booth {{booth}}.\n\n{{sender}}" },
+    { id: "e3", seg: "S1", name: "S1 · Email 3 · Ultimi slot", subject: "Last slots for Hong Kong",
+      body: "Hi {{first_name}}, our Hong Kong calendar closes on Friday. If 15 minutes at your booth on 11–13 Nov is useful, reply with a time. If not, no problem: I'll send you the trend note after the show.\n\n{{sender}}" },
+    { id: "l1", seg: "S1", name: "LinkedIn · Richiesta di collegamento", subject: "",
+      body: "Hi {{first_name}}, I lead R&D at Verel, an Italian cosmetic formulator. Italy is Country of Honour at Cosmoprof Asia this year and we'll be in Hong Kong 10–13 Nov. {{observation}} Happy to connect." },
+    { id: "o10", seg: "S1", name: "In fiera · Oggi siamo nel vostro padiglione", subject: "",
+      body: "Morning {{first_name}}, I'm in Hall {{hall}} today. Would 10 minutes at your booth at {{slot_1}} work? I'll bring the one-pager on {{company}}." },
+    { id: "r1", seg: "S2", name: "S2 · Email 1 · Retailer", subject: "An exclusive active for {{company}}'s own brand",
+      body: "Hi {{first_name}},\n\n{{observation}}\n\nVerel is an Italian formulator. Our R&D develops botanical actives, clinically validated with the University of Parma, and can produce an active ad hoc for a retailer: a premium tier that no other chain has.\n\nWe're at Cosmopack Asia (AsiaWorld-Expo) 10–12 Nov and at Cosmoprof Asia (HKCEC) 11–13 Nov. Could we meet for 20 minutes, at your choice of venue?\n\n{{link}}\n\n{{sender}}" },
+    { id: "lr", seg: "S2", name: "S2 · LinkedIn · Retailer", subject: "",
+      body: "Hi {{first_name}}, Verel (Italian formulator, part of the Italian delegation at Cosmoprof Asia) develops proprietary actives that retailers can own for their private label. We're in Hong Kong 10–13 Nov: 20 minutes at the HKCEC or AsiaWorld-Expo?" },
+    { id: "a31", seg: "S3", name: "S3 · Awareness 1", subject: "Italy is Country of Honour at Cosmoprof Asia, a note from Verel",
+      body: "Hi {{first_name}},\n\nItaly is Country of Honour at Cosmoprof Asia this year, and Verel is part of the delegation. We're an Italian formulator: our R&D develops proprietary botanical actives, clinically validated with the University of Parma, for skin, hair and oral care brands.\n\nOur short research summary (English, PDF) is here: {{link}}. No reply needed.\n\n{{sender}}" },
+    { id: "a32", seg: "S3", name: "S3 · Awareness 2", subject: "One observation on {{company}}",
+      body: "Hi {{first_name}}, {{observation}} Happy to share how we'd approach it in a formula, if useful.\n\n{{sender}}" },
+    { id: "a33", seg: "S3", name: "S3 · Richiesta di incontro", subject: "Hong Kong, 10–13 Nov",
+      body: "Hi {{first_name}}, we're in Hong Kong 10–13 Nov. If you're in town, 20 minutes over coffee near the HKCEC? If not, a 20-minute call with our R&D team after the show works too.\n\n{{sender}}" },
+    { id: "w1", seg: "", name: "Conferma 24 ore prima", subject: "",
+      body: "Hi {{first_name}}, {{sender}} from Verel. Confirming tomorrow {{slot_1}}, booth {{booth}}, Hall {{hall}}. I'll bring the one-pager. Reply here if anything changes." },
+    { id: "p1", seg: "", name: "Dopo l'incontro (entro 72h)", subject: "Following up from Hong Kong, {{company}}",
+      body: "Hi {{first_name}}, thank you for the time in Hong Kong. As promised, here is the page on {{observation}}. The next step we discussed: our 5-day R&D feasibility assessment on your brief. Shall we set a 20-minute call the week of {{slot_1}}?\n\n{{sender}}" },
+    { id: "p2", seg: "", name: "Non incontrati · What we saw", subject: "What we saw at Cosmoprof Asia 2026",
+      body: "Hi {{first_name}}, we didn't manage to meet in Hong Kong. Here are the five formulation trends our R&D team noted at the show (2 pages): {{link}}. If one is relevant to {{company}}, a 20-minute call with the team would be a good start. We can also return a feasibility assessment on a brief within 5 working days.\n\n{{sender}}" }
+  ];
+
+  const BANNED = [
+    { re: /\bsamples?\b|campion/i, msg: "Cita i campioni: Verel li offre solo su richiesta, mai nei messaggi." },
+    { re: /\bsun ?screens?\b|\bspf\b|\bsun ?care\b|\bsolar[ei]?\b|\bsunblock\b|\buv filter/i, msg: "Cita i solari: Verel non li produce ancora." },
+    { re: /\bfree\b|special offer|\bdiscount\b|\bpromo(tion)?\b|limited time/i, msg: "Tono da venditore (free, offerte, sconti)." },
+    { re: /\bbest\b|world[- ]class|\bleading\b|\bunmatched\b|\brevolutionary\b|\bguarantee/i, msg: "Superlativo da evitare." },
+    { re: /hubspot/i, msg: "HubSpot non è nello stack approvato." }
+  ];
+  const CAUTION = [
+    { re: /6[–-]8 weeks/i, msg: "Time to market 6-8 settimane: usarlo solo dopo conferma interna (domanda C8)." }
+  ];
+
+  const CHANNELS = [
+    { k: "matchmeet", t: "Match&Meet e Buyer Programme", d: "Oltre 400 buyer da 45+ paesi. Probabilmente incluso nella fee ICE da 750 USD: servono le credenziali.", seg: "S2" },
+    { k: "elite", t: "Elite Circle", d: "Comunità su invito per CEO e founder: colazione il 10/11 all'AWE e cena di networking. Candidatura di Eugenio.", seg: "S1 · S2" },
+    { k: "honour", t: "Italia Paese ospite + ICE", d: "Aggancio in ogni messaggio. Chiedere a ICE e Cosmetica Italia eventi del padiglione, lounge all'HKCEC e presentazioni dell'ufficio di Hong Kong.", seg: "Tutti" },
+    { k: "lungfung", t: "Lung Fung, cliente esistente", d: "Chiedere 2-3 presentazioni a brand o retailer della loro rete e il permesso di citarli.", seg: "S1 · S2" },
+    { k: "bifa", t: "BIFA Symposium, 10-11/11 all'AWE", d: "Formulatori e R&D dei brand nella sede di Verel. Contattare relatori e partecipanti prima, caffè allo stand.", seg: "S1" },
+    { k: "swiss", t: "Directory dei padiglioni nazionali", d: "SWISS Pavilion 2026 conferma Epigeneva ed EVENSWISS; German Pavilion confermato solo per il 2025. Ricontrollare la directory generale.", seg: "S1" },
+    { k: "walkin", t: "Visitatori brand owner a Cosmopack", d: "Chi visita Cosmopack cerca fornitori [Inferenza]. Qualificare allo stand con la scheda \"Qualifica\" e fissare un secondo incontro all'HKCEC.", seg: "S1 · S3" },
+    { k: "italian", t: "Collettiva italiana a Cosmopack", d: "Accordo con 4-6 espositori italiani non concorrenti (packaging, ingredienti) per segnalarsi a vicenda i brand owner.", seg: "S1" },
+    { k: "debrief", t: "Nota \"What we saw in Hong Kong\"", d: "Dal 16-17/11 a tutti i non incontrati, con call di 20 minuti e valutazione di fattibilità in 5 giorni.", seg: "Tutti" },
+    { k: "seoul", t: "Tappa a Seul 16-18/11", d: "Solo se almeno 3 aziende coreane chiedono un incontro in sede. Decisione entro il 3/11.", seg: "S1 · S3" }
+  ];
+  const CHAN_STATES = ["Da fare", "In corso", "Fatto", "Non disponibile"];
+
+  // ---------- State ----------
+  const state = { prospects: [], channels: {}, db: null, canWrite: true, loaded: false, view: "pipeline", openId: null };
+
+  // ---------- Utils ----------
+  const $ = (s) => document.querySelector(s);
+  const esc = (v) => String(v == null ? "" : v).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const norm = (s) => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim();
+  const slug = (s) => norm(s).replace(/ /g, "-").slice(0, 60) || "azienda";
+  function toast(msg) { const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toast._t); toast._t = setTimeout(() => { t.hidden = true; }, 2600); }
+  function lsGet(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } }
+  function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* storage unavailable */ } }
+
+  // ---------- Clock & countdown ----------
+  function tick() {
+    const now = new Date();
+    try { $("#hkclock").textContent = new Intl.DateTimeFormat("it-IT", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Hong_Kong" }).format(now); } catch (e) { /* older browsers */ }
+    const start = Date.UTC(2026, 10, 10, 2, 0); // 10/11 10:00 HKT
+    const days = Math.ceil((start - now.getTime()) / 86400000);
+    $("#countdown").textContent = days > 0 ? "T-" + days : (days > -3 ? "In fiera" : "Post-fiera");
+  }
+  tick(); setInterval(tick, 30000);
+
+  // ---------- Tabs ----------
+  function setView(v) {
+    state.view = v;
+    document.querySelectorAll("nav.tabs button").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.view === v)));
+    document.querySelectorAll("main > section").forEach((s) => { s.hidden = s.id !== "view-" + v; });
+    lsSet("radar.view", v);
+    if (v === "messaggi") renderMessage();
+    if (v === "agenda") renderAgenda();
+  }
+  document.querySelectorAll("nav.tabs button").forEach((b) => b.addEventListener("click", () => setView(b.dataset.view)));
+  const hashView = (location.hash || "").replace("#", "");
+  setView(["pipeline", "qualifica", "messaggi", "agenda", "canali"].includes(hashView) ? hashView : lsGet("radar.view", "pipeline"));
+
+  // ---------- Filters ----------
+  STATUSES.forEach((s) => { const o = document.createElement("option"); o.textContent = s; $("#f-status").appendChild(o); });
+  ["#f-q", "#f-seg", "#f-pri", "#f-status", "#f-alert"].forEach((id) => $(id).addEventListener("input", renderTable));
+
+  // ---------- KPIs ----------
+  function renderKpis() {
+    const by = { S1: 0, S2: 0, S3: 0 };
+    let active = 0;
+    state.prospects.forEach((p) => {
+      if (CONFIRMED.has(p.status) && by[p.segment] != null) by[p.segment]++;
+      if (!["Escluso", "Non interessato"].includes(p.status)) active++;
+    });
+    const total = by.S1 + by.S2 + by.S3;
+    const tile = (label, v, base, stretch, sub) => {
+      const max = Math.max(stretch, v, 1);
+      return '<div class="kpi"><span class="eyebrow">' + esc(label) + '</span><span class="v">' + v + '<span class="muted" style="font-size:15px;font-weight:500"> / ' + base + "</span></span>" +
+        '<div class="bar" aria-hidden="true"><i style="width:' + Math.min(100, (v / max) * 100) + '%"></i><b style="left:' + (base / max) * 100 + '%"></b></div>' +
+        '<span class="small muted">' + esc(sub) + "</span></div>";
+    };
+    $("#kpis").innerHTML =
+      tile("Confermati totali", total, 11, 19, "Obiettivo base 11 · ambizioso 19 · " + active + " aziende attive") +
+      tile("S1 · Brand espositori", by.S1, TARGETS.S1.base, TARGETS.S1.stretch, "Base 8 · ambizioso 12") +
+      tile("S2 · Retailer", by.S2, TARGETS.S2.base, TARGETS.S2.stretch, "Base 2 · ambizioso 4") +
+      tile("S3 · Brand APAC", by.S3, TARGETS.S3.base, TARGETS.S3.stretch, "Base 1 · ambizioso 3");
+  }
+
+  // ---------- Table ----------
+  const statusChip = (s) => {
+    const cls = CONFIRMED.has(s) ? "good" : (s === "Escluso" || s === "Non interessato") ? "bad" : (s === "In attesa di Eugenio") ? "warn" : (s === "Da contattare") ? "" : "info";
+    return '<span class="chip ' + cls + '">' + esc(s || "Da contattare") + "</span>";
+  };
+  function filtered() {
+    const q = norm($("#f-q").value), seg = $("#f-seg").value, pri = $("#f-pri").value, st = $("#f-status").value, al = $("#f-alert").checked;
+    const order = { A: 0, B: 1, C: 2 };
+    return state.prospects
+      .filter((p) => (!seg || p.segment === seg) && (!pri || p.priority === pri) && (!st || (p.status || "Da contattare") === st) && (!al || p.alert))
+      .filter((p) => !q || norm([p.name, p.country, p.stand, p.hall, p.category, p.notes].join(" ")).includes(q))
+      .sort((a, b) => (a.segment || "").localeCompare(b.segment || "") || (order[a.priority] ?? 3) - (order[b.priority] ?? 3) || String(a.name).localeCompare(String(b.name)));
+  }
+  function renderTable() {
+    const wrap = $("#table-wrap");
+    if (!state.loaded) { wrap.innerHTML = '<div class="empty"><strong>Caricamento della pipeline…</strong><span class="small">Le aziende arrivano dal database condiviso dell\'app.</span></div>'; return; }
+    if (!state.prospects.length) {
+      wrap.innerHTML = '<div class="empty"><strong>Nessuna azienda ancora</strong><span class="small">Aggiungi la prima con "Nuovo prospect" o dalla scheda "Qualifica un prospect".</span></div>';
+      return;
+    }
+    const rows = filtered();
+    if (!rows.length) { wrap.innerHTML = '<div class="empty"><strong>Nessuna azienda con questi filtri</strong></div>'; return; }
+    wrap.innerHTML = "<table><thead><tr><th>Azienda</th><th>Segm.</th><th>Pri.</th><th>Paese</th><th>Stand</th><th>Stato</th><th>Prossima azione</th><th>Slot</th></tr></thead><tbody>" +
+      rows.map((p) => {
+        const slot = p.slotDay ? (DAYS.find((d) => d.key === p.slotDay)?.label || p.slotDay) + (p.slotTime ? " · " + p.slotTime : "") : "";
+        return '<tr data-id="' + esc(p.id) + '"><td><div class="name">' + esc(p.name) + "</div>" +
+          (p.alert ? '<span class="chip warn" style="margin-top:4px">' + esc(p.alert) + "</span>" : '<span class="small muted">' + esc(p.category || "") + "</span>") +
+          '</td><td><span class="seg">' + esc(p.segment) + '</span></td><td><span class="chip ' + esc(p.priority) + '">' + esc(p.priority || "–") + "</span></td><td>" + esc(p.country) +
+          '</td><td class="mono small">' + esc(p.stand || p.hall || "") + "</td><td>" + statusChip(p.status) + '</td><td class="small">' + esc(p.nextAction || "") + '</td><td class="small mono">' + esc(slot) + "</td></tr>";
+      }).join("") + "</tbody></table>";
+    wrap.querySelectorAll("tbody tr").forEach((tr) => tr.addEventListener("click", () => openDrawer(tr.dataset.id)));
+  }
+
+  // ---------- Drawer ----------
+  function opt(list, cur) { return list.map((v) => { const val = Array.isArray(v) ? v[0] : v, lab = Array.isArray(v) ? v[1] : v; return '<option value="' + esc(val) + '"' + (val === cur ? " selected" : "") + ">" + esc(lab) + "</option>"; }).join(""); }
+  function openDrawer(id, draft) {
+    const p = draft || state.prospects.find((x) => x.id === id);
+    if (!p) return;
+    state.openId = draft ? null : id;
+    const d = $("#drawer");
+    d.innerHTML =
+      '<div class="head"><div class="stack" style="gap:4px"><span class="eyebrow">' + esc(SEG_LABEL[p.segment] || "Nuovo prospect") + '</span><h2>' + esc(p.name || "Nuovo prospect") + '</h2></div><button class="btn" id="d-close" aria-label="Chiudi">Chiudi</button></div>' +
+      (p.alert ? '<div class="notice">' + esc(p.alert) + "</div>" : "") +
+      (draft ? "" : '<dl class="kv">' +
+        (p.category ? "<dt>Categoria</dt><dd>" + esc(p.category) + "</dd>" : "") +
+        (p.revenue ? "<dt>Fatturato</dt><dd>" + esc(p.revenue) + "</dd>" : "") +
+        (p.why ? "<dt>Perché è un fit</dt><dd>" + esc(p.why) + "</dd>" : "") +
+        (p.channel ? "<dt>Canale di contatto</dt><dd>" + esc(p.channel) + "</dd>" : "") +
+        (p.source ? "<dt>Fonte</dt><dd>" + esc(p.source) + "</dd>" : "") + "</dl>") +
+      '<div class="form-grid">' +
+        (draft ? '<label class="f full">Nome azienda<input type="text" id="d-name" value="' + esc(p.name) + '"></label>' +
+          '<label class="f">Segmento<select id="d-seg">' + opt([["S1", "S1 · Brand espositori"], ["S2", "S2 · Retailer ≥500 PV"], ["S3", "S3 · Brand APAC"]], p.segment) + "</select></label>" +
+          '<label class="f">Paese<input type="text" id="d-country" value="' + esc(p.country) + '"></label>' +
+          '<label class="f full">Perché è un fit<input type="text" id="d-why" value="' + esc(p.why) + '"></label>' : "") +
+        '<label class="f">Priorità<select id="d-pri">' + opt(["A", "B", "C"], p.priority || "B") + "</select></label>" +
+        '<label class="f">Stato<select id="d-status">' + opt(STATUSES, p.status || "Da contattare") + "</select></label>" +
+        '<label class="f">Punto di differenza<select id="d-hook">' + opt(Object.entries(HOOKS), p.hook || "A") + "</select></label>" +
+        '<label class="f">Hall / stand<input type="text" id="d-stand" value="' + esc(p.stand || "") + '" placeholder="es. 1E-A1A"></label>' +
+        '<label class="f full">Prossima azione<input type="text" id="d-next" value="' + esc(p.nextAction || "") + '" placeholder="es. Email 2 il 2/11"></label>' +
+        '<label class="f">Giorno<select id="d-day">' + opt([["", "—"]].concat(DAYS.map((x) => [x.key, x.label])), p.slotDay || "") + "</select></label>" +
+        '<label class="f">Ora<input type="text" id="d-time" value="' + esc(p.slotTime || "") + '" placeholder="10:30"></label>' +
+        '<label class="f full">Luogo<select id="d-venue">' + opt([["", "—"]].concat(VENUES), p.slotVenue || "") + "</select></label>" +
+        '<label class="f full">Ruolo del referente<input type="text" id="d-role" value="' + esc(p.role || "") + '" placeholder="Founder, R&amp;D, marketing prodotto"></label>' +
+        '<label class="f full">Note<textarea id="d-notes">' + esc(p.notes || "") + "</textarea></label>" +
+      "</div>" +
+      '<p class="small muted">Niente email o nomi di persone in queste note: restano in Apollo e MailUp.</p>' +
+      '<div class="row"><button class="btn primary" id="d-save">' + (draft ? "Aggiungi alla pipeline" : "Salva") + '</button>' +
+      (draft ? "" : '<button class="btn" id="d-msg">Prepara un messaggio</button>') + "</div>";
+    d.hidden = false; $("#scrim").hidden = false;
+    $("#d-close").addEventListener("click", closeDrawer);
+    $("#d-save").addEventListener("click", () => saveDrawer(p, !!draft));
+    const m = $("#d-msg"); if (m) m.addEventListener("click", () => { closeDrawer(); $("#m-company").value = p.id; pickTemplateFor(p); setView("messaggi"); });
+    $("#d-pri").focus();
+  }
+  function closeDrawer() { $("#drawer").hidden = true; $("#scrim").hidden = true; state.openId = null; }
+  $("#scrim").addEventListener("click", closeDrawer);
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !$("#drawer").hidden) closeDrawer(); });
+
+  async function saveDrawer(p, isNew) {
+    const val = (id) => { const el = $(id); return el ? el.value.trim() : undefined; };
+    const patch = { priority: val("#d-pri"), status: val("#d-status"), hook: val("#d-hook"), stand: val("#d-stand"), nextAction: val("#d-next"),
+      slotDay: val("#d-day"), slotTime: val("#d-time"), slotVenue: val("#d-venue"), role: val("#d-role"), notes: val("#d-notes"), updatedAt: new Date().toISOString() };
+    if (/@[a-z0-9-]+\.[a-z]/i.test((patch.notes || "") + " " + (patch.role || ""))) { toast("Togli l'email dalle note: i contatti restano in Apollo."); return; }
+    if (isNew) {
+      const name = val("#d-name");
+      if (!name) { toast("Scrivi il nome dell'azienda."); return; }
+      Object.assign(patch, { name, segment: val("#d-seg"), country: val("#d-country"), why: val("#d-why"), category: p.category || "", revenue: p.revenue || "", source: p.source || "Inserito dall'app", alert: p.alert || "" });
+    }
+    if (!state.db) { toast("Database non disponibile: le modifiche non vengono salvate."); return; }
+    const btn = $("#d-save"); btn.disabled = true;
+    try {
+      if (isNew) {
+        let id = (patch.segment || "s").toLowerCase() + "-" + slug(patch.name);
+        if (state.prospects.some((x) => x.id === id)) id += "-" + Math.random().toString(36).slice(2, 6);
+        await state.db.collection("prospects").doc(id).set(patch);
+        toast("Aggiunta alla pipeline");
+      } else {
+        await state.db.collection("prospects").doc(p.id).update(patch);
+        toast("Salvato");
+      }
+      closeDrawer();
+    } catch (e) {
+      btn.disabled = false;
+      toast(e && e.code === "invalid_argument" ? "Non hai i permessi per modificare: chiedi l'accesso da Contributor." : "Salvataggio non riuscito, riprova.");
+    }
+  }
+  $("#btn-new").addEventListener("click", () => openDrawer(null, { name: "", segment: "S1", priority: "B", status: "Da contattare", hook: "A" }));
+
+  // ---------- Qualify ----------
+  const qIds = ["q-name", "q-site", "q-country", "q-type", "q-exh", "q-cat", "q-rev", "q-revsrc", "q-pos", "q-prod", "q-own", "q-pv", "q-ing", "q-launch", "q-nord", "q-eu", "q-notes"];
+  function readQ() {
+    const v = {}; qIds.forEach((id) => { const el = document.getElementById(id); v[id.slice(2)] = el.type === "checkbox" ? el.checked : el.value; }); return v;
+  }
+  function qualify(v) {
+    // Pure: returns {grade, segment, score, reasons[], flags[], hook}
+    const reasons = [], flags = [];
+    const n = norm(v.name);
+    const hit = n && EXCLUDED.find(([k]) => (" " + n + " ").includes(" " + k + " "));
+    if (hit) return { grade: "X", segment: "", score: 0, reasons: ["In lista esclusioni: " + hit[1] + "."], flags, hook: "" };
+    if (v.type === "retailer") {
+      const pv = Number(v.pv);
+      if (!v.pv) return { grade: "C", segment: "S2", score: 0, reasons: ["Inserisci il numero di punti vendita: la soglia è 500."], flags, hook: "A" };
+      if (pv < 500) return { grade: "X", segment: "S2", score: 0, reasons: ["Sotto la soglia dei 500 punti vendita (" + pv + ")."], flags: ["Deroga possibile solo con decisione di Eugenio"], hook: "" };
+      let s = 6; reasons.push("Sopra la soglia dei 500 punti vendita.");
+      if (v.pos === "premium" || v.pos === "medioalto") { s += 2; reasons.push("Assortimento medio-alto o premium."); }
+      if (v.pos === "mass") { s -= 2; reasons.push("Posizionamento mass: serve una linea dedicata."); }
+      if (v.ing) { s += 1; reasons.push("Private label con storia di ingredienti."); }
+      flags.push("Referente: own brand / product development, non procurement");
+      return { grade: s >= 8 ? "A" : s >= 6 ? "B" : "C", segment: "S2", score: s, reasons, flags, hook: "A" };
+    }
+    if (v.cat === "makeup" || v.cat === "altro") return { grade: "X", segment: "", score: 0, reasons: ["Fuori categoria: Verel lavora su skincare, haircare e oral care."], flags, hook: "" };
+    if (v.prod === "inhouse") return { grade: "X", segment: "", score: 0, reasons: ["Produzione propria: escluso dai criteri."], flags, hook: "" };
+    if (v.own === "grande") return { grade: "X", segment: "", score: 0, reasons: ["Grande gruppo: escluso dai criteri."], flags, hook: "" };
+    let s = 0, capB = false;
+    const rev = v.rev === "" ? null : Number(v.rev);
+    if (rev == null) { flags.push("Fatturato non noto: verificare su registri e Apollo"); }
+    else if (rev >= 5 && rev <= 100) { s += 3; reasons.push("Fatturato nella fascia 5-100 M€."); }
+    else if ((rev >= 2 && rev < 5) || (rev > 100 && rev <= 150)) { s += 1; capB = true; reasons.push("Fatturato vicino alla fascia (" + rev + " M€): chiedere a Eugenio."); }
+    else { s -= 2; capB = true; reasons.push("Fatturato fuori fascia (" + rev + " M€)."); }
+    if (rev != null && (v.revsrc === "dichiarato" || v.revsrc === "ignoto")) flags.push("Fatturato senza fonte solida");
+    const posPts = { premium: 3, medioalto: 2, medio: 0, mass: -2 }[v.pos] ?? 0; s += posPts;
+    reasons.push({ premium: "Posizionamento premium.", medioalto: "Posizionamento medio-alto.", medio: "Posizionamento medio: fit debole.", mass: "Posizionamento mass: fuori profilo." }[v.pos]);
+    if (v.ing) { s += 2; reasons.push("Comunicazione su tecnologie, ingredienti o clean label (profilo Miamo-like)."); }
+    if (v.prod === "terzista") { s += 2; reasons.push("Produce già con terzisti."); }
+    else if (v.prod === "mista") { s += 1; capB = true; reasons.push("Produzione mista: aggancio solo sulle linee esternalizzate."); }
+    else flags.push("Chi produce? Controllare l'etichetta (in Corea 제조업자, in Giappone 製造元)");
+    if (v.own === "indip") { s += 1; reasons.push("Indipendente."); } else flags.push("Gruppo piccolo o clinico: trattarlo come indipendente solo con conferma");
+    if (v.cat === "sun") { capB = true; flags.push("Brand centrato sui solari: Verel non li produce ancora, proporre solo linee non SPF"); s -= 2; }
+    let grade = s >= 9 ? "A" : s >= 6 ? "B" : "C";
+    if (capB && grade === "A") grade = "B";
+    const segment = v.exh === "si" ? "S1" : "S3";
+    if (v.exh === "ignoto") flags.push("Presenza in fiera da verificare nella directory 2026");
+    const hook = v.eu ? "D" : v.ing ? "A" : v.nord ? "C" : v.launch ? "B" : "A";
+    return { grade, segment, score: s, reasons: reasons.filter(Boolean), flags, hook };
+  }
+  function renderVerdict() {
+    const v = readQ(), r = qualify(v);
+    $("#q-pv-wrap").hidden = v.type !== "retailer";
+    const label = { A: "Priorità A", B: "Priorità B", C: "Priorità C", X: "Escluso" }[r.grade];
+    const sub = r.grade === "X" ? "Non va contattato con i criteri attuali." : r.grade === "A" ? "Fit forte: entra subito nella sequenza." : r.grade === "B" ? "Buon fit con caveat: dopo le A." : "Opportunistico: non si lavora ora.";
+    $("#verdict").className = "verdict " + r.grade;
+    $("#verdict").innerHTML = '<div class="row" style="justify-content:space-between;align-items:baseline"><span class="big">' + label + "</span>" +
+      (r.segment ? '<span class="seg">' + r.segment + " · " + esc(SEG_LABEL[r.segment]) + "</span>" : "") + "</div><p>" + esc(sub) + "</p>" +
+      (r.reasons.length ? '<ul class="reasons small">' + r.reasons.map((x) => "<li>" + esc(x) + "</li>").join("") + "</ul>" : "") +
+      (r.flags.length ? '<div class="row">' + r.flags.map((f) => '<span class="chip warn">' + esc(f) + "</span>").join("") + "</div>" : "") +
+      (r.hook ? '<p class="small"><strong>Punto di differenza consigliato:</strong> ' + esc(HOOKS[r.hook]) + "</p>" : "") +
+      (r.grade !== "X" && v.name ? '<div class="row"><button class="btn primary" id="q-add">Aggiungi alla pipeline</button></div>' : "");
+    const add = $("#q-add");
+    if (add) add.addEventListener("click", () => {
+      const rev = v.rev ? v.rev + " M€" + (v.revsrc !== "ignoto" ? " (" + $("#q-revsrc").selectedOptions[0].textContent + ")" : "") : "";
+      openDrawer(null, { name: v.name, segment: r.segment || "S2", country: v.country, priority: r.grade === "X" ? "C" : r.grade, status: r.grade === "A" ? "Da contattare" : "In attesa di Eugenio",
+        hook: r.hook || "A", category: $("#q-cat").selectedOptions[0].textContent, revenue: rev, why: r.reasons.slice(0, 2).join(" "), notes: v.notes, alert: r.flags[0] || "", source: "Qualifica nell'app" + (v.site ? " · " + v.site : "") });
+    });
+  }
+  qIds.forEach((id) => document.getElementById(id).addEventListener("input", renderVerdict));
+  $("#q-reset").addEventListener("click", () => { qIds.forEach((id) => { const el = document.getElementById(id); if (el.type === "checkbox") el.checked = false; else if (el.tagName === "SELECT") el.selectedIndex = ["q-revsrc"].includes(id) ? 3 : ["q-pos", "q-prod"].includes(id) ? (id === "q-pos" ? 2 : 3) : 0; else el.value = ""; }); $("#q-ai-out").hidden = true; renderVerdict(); });
+  renderVerdict();
+
+  // Ask Claude for a draft qualification
+  let aiCtl = null;
+  async function initSample() {
+    let sample = null;
+    try { sample = await window.claude?.use?.("sample"); } catch (e) { sample = null; }
+    if (!sample) return;
+    const btn = $("#q-ai"); btn.hidden = false;
+    btn.addEventListener("click", async () => {
+      const v = readQ();
+      if (!v.name) { toast("Scrivi prima il nome del brand."); return; }
+      const out = $("#q-ai-out"); out.hidden = false;
+      if (aiCtl) aiCtl.abort();
+      aiCtl = new AbortController();
+      btn.disabled = true;
+      out.innerHTML = '<div class="row"><span class="muted">Claude sta preparando la bozza…</span><button class="btn" id="q-ai-stop">Ferma</button></div>';
+      $("#q-ai-stop").addEventListener("click", () => aiCtl && aiCtl.abort());
+      const prompt = "Sei un analista di Verel, terzista (CDMO) italiano di skincare, haircare e oral care. Valuta il brand qui sotto per una prima qualificazione commerciale.\n" +
+        "Non hai accesso al web: usa solo conoscenze generali. Se non sei sicuro di un dato, metti null o 'non noto'. Non inventare numeri.\n" +
+        "Criteri di Verel: brand B2C skincare/haircare/oral care; fatturato 5-100 M€; posizionamento medio-alto o premium; comunicazione su tecnologie, ingredienti o clean label; esclusi grandi gruppi, brand con produzione propria, make-up e profumi. Verel non produce solari.\n\n" +
+        "Brand: " + v.name + "\nSito: " + (v.site || "non indicato") + "\nPaese: " + (v.country || "non indicato") + "\nNote dell'utente: " + (v.notes || "nessuna") + "\n\n" +
+        "Rispondi SOLO con un oggetto JSON con queste chiavi: " +
+        '{"categoria":"skin|hair|oral|sun|makeup|altro","fatturato_eur_m":numero o null,"posizionamento":"premium|medioalto|medio|mass","ingredient_led":true/false,' +
+        '"produzione":"terzista|mista|inhouse|ignota","proprieta":"indip|piccolo|grande","europa":true/false,"lanci_frequenti":true/false,' +
+        '"sintesi":"2 frasi in italiano","aggancio":"1 frase in italiano: perché Verel, senza citare solari o campioni","da_verificare":["fino a 4 punti in italiano"]}';
+      try {
+        const r = await sample.json(prompt, { signal: aiCtl.signal, modelTier: "default" });
+        applyAi(r);
+        out.innerHTML = '<span class="eyebrow">Bozza di Claude · da verificare su Apollo e sui registri</span>' +
+          '<div class="ai-out">' + esc(r.sintesi || "") + (r.aggancio ? "\n\nAggancio: " + esc(r.aggancio) : "") +
+          (Array.isArray(r.da_verificare) && r.da_verificare.length ? "\n\nDa verificare:\n• " + r.da_verificare.map(esc).join("\n• ") : "") + "</div>" +
+          '<p class="small muted">Ho compilato i campi con la bozza. Correggili con i dati verificati prima di aggiungere il prospect.</p>';
+      } catch (e) {
+        const msg = { cancelled: "Richiesta fermata.", not_granted: "Claude non è autorizzato per questa pagina.", sampling_disabled: "Claude non è disponibile per questo account.",
+          rate_limited: "Troppe richieste: riprova tra qualche minuto.", refused: "Claude non ha risposto a questa richiesta: cambia le note.", invalid_json: "Risposta non leggibile: riprova." }[e && e.code] || "Richiesta non riuscita: riprova più tardi.";
+        out.innerHTML = '<p class="small muted">' + esc(msg) + "</p>";
+        if (e && ["not_granted", "sampling_disabled", "not_declared", "capability_disabled", "capability_removed"].includes(e.code)) btn.hidden = true;
+      } finally { btn.disabled = false; }
+    });
+  }
+  function applyAi(r) {
+    const setSel = (id, val, allowed) => { if (allowed.includes(val)) document.getElementById(id).value = val; };
+    setSel("q-cat", r.categoria, ["skin", "hair", "oral", "sun", "makeup", "altro"]);
+    if (typeof r.fatturato_eur_m === "number") { $("#q-rev").value = r.fatturato_eur_m; $("#q-revsrc").value = "dichiarato"; }
+    setSel("q-pos", r.posizionamento, ["premium", "medioalto", "medio", "mass"]);
+    setSel("q-prod", r.produzione, ["terzista", "mista", "inhouse", "ignota"]);
+    setSel("q-own", r.proprieta, ["indip", "piccolo", "grande"]);
+    $("#q-ing").checked = !!r.ingredient_led; $("#q-eu").checked = !!r.europa; $("#q-launch").checked = !!r.lanci_frequenti;
+    const extra = "Bozza Claude: " + (r.sintesi || "");
+    if (!$("#q-notes").value.includes("Bozza Claude")) $("#q-notes").value = ($("#q-notes").value ? $("#q-notes").value + "\n" : "") + extra;
+    renderVerdict();
+  }
+
+  // ---------- Messages ----------
+  TEMPLATES.forEach((t) => { const o = document.createElement("option"); o.value = t.id; o.textContent = t.name; $("#m-tpl").appendChild(o); });
+  function fillCompanySelect() {
+    const sel = $("#m-company"), cur = sel.value;
+    sel.innerHTML = '<option value="">— scegli un\'azienda —</option>' + state.prospects.slice().sort((a, b) => String(a.name).localeCompare(String(b.name)))
+      .map((p) => '<option value="' + esc(p.id) + '">' + esc(p.name) + " · " + esc(p.segment) + "</option>").join("");
+    if (cur) sel.value = cur;
+  }
+  function pickTemplateFor(p) {
+    const map = { S2: "r1", S3: "a31" };
+    $("#m-tpl").value = p.segment === "S1" ? ({ A: "s1a", B: "s1b", C: "s1c", D: "s1d" }[p.hook || "A"]) : map[p.segment] || "s1a";
+  }
+  $("#m-company").addEventListener("change", () => { const p = state.prospects.find((x) => x.id === $("#m-company").value); if (p) pickTemplateFor(p); renderMessage(); });
+  ["#m-tpl", "#m-first", "#m-sender", "#m-obs", "#m-slot1", "#m-slot2", "#m-link"].forEach((id) => $(id).addEventListener("input", renderMessage));
+  ["#m-sender", "#m-link"].forEach((id) => { $(id).value = lsGet("radar" + id, ""); $(id).addEventListener("change", () => lsSet("radar" + id, $(id).value)); });
+  function composeMessage() {
+    const t = TEMPLATES.find((x) => x.id === $("#m-tpl").value) || TEMPLATES[0];
+    const p = state.prospects.find((x) => x.id === $("#m-company").value) || {};
+    const standStr = String(p.stand || "");
+    const hall = (standStr.match(/^\s*(?:hall\s*)?([0-9][A-Z])/i) || [])[1] || "";
+    const vals = { company: p.name, first_name: $("#m-first").value.trim(), observation: $("#m-obs").value.trim(), slot_1: $("#m-slot1").value.trim(), slot_2: $("#m-slot2").value.trim(),
+      link: $("#m-link").value.trim(), sender: $("#m-sender").value.trim(), booth: standStr.replace(/^hall\s*\S+\s*/i, "").trim(), hall };
+    const missing = new Set();
+    const fill = (s) => s.replace(/\{\{(\w+)\}\}/g, (m, k) => { const v = vals[k]; if (v) return v; missing.add(k); return "[" + k + "]"; });
+    return { t, subject: fill(t.subject), body: fill(t.body), missing: [...missing] };
+  }
+  function renderMessage() {
+    const { t, subject, body, missing } = composeMessage();
+    const full = (subject ? "Subject: " + subject + "\n\n" : "") + body;
+    $("#m-subject-h").textContent = t.subject ? "Email" : "Messaggio";
+    $("#m-out").innerHTML = esc(full).replace(/\[(\w+)\]/g, "<mark>[$1]</mark>");
+    const words = body.split(/\s+/).filter(Boolean).length;
+    const isLinkedIn = /linkedin/i.test(t.name) && /collegamento/i.test(t.name);
+    $("#m-count").textContent = isLinkedIn ? body.length + " caratteri (massimo 300)" : words + " parole (massimo 90)";
+    const issues = [];
+    BANNED.forEach((b) => { if (b.re.test(full)) issues.push(["bad", b.msg]); });
+    CAUTION.forEach((b) => { if (b.re.test(full)) issues.push(["warn", b.msg]); });
+    if (isLinkedIn ? body.length > 300 : words > 90) issues.push(["warn", isLinkedIn ? "Troppo lungo per una richiesta di collegamento." : "Più di 90 parole: accorcia."]);
+    if (missing.includes("observation")) issues.push(["bad", "Manca l'osservazione specifica: senza, il messaggio non va inviato."]);
+    missing.filter((k) => k !== "observation").forEach((k) => issues.push(["warn", "Campo da compilare: " + k + "."]));
+    const p = state.prospects.find((x) => x.id === $("#m-company").value);
+    if (p && p.alert) issues.push(["warn", "Avviso sull'azienda: " + p.alert]);
+    if (p && t.seg && p.segment !== t.seg) issues.push(["warn", "Questo modello è pensato per il segmento " + t.seg + ", l'azienda è " + p.segment + "."]);
+    if (!issues.length) issues.push(["good", "Nessun problema: pronto da incollare in Apollo o Gmail."]);
+    $("#m-issues").innerHTML = issues.map(([c, m]) => '<div class="issue"><span class="chip ' + c + '">' + (c === "good" ? "OK" : c === "bad" ? "Blocca" : "Attenzione") + "</span><span>" + esc(m) + "</span></div>").join("");
+  }
+  $("#m-copy").addEventListener("click", () => {
+    const { subject, body } = composeMessage();
+    const text = (subject ? subject + "\n\n" : "") + body;
+    const fallback = () => { const r = document.createRange(); r.selectNodeContents($("#m-out")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); toast("Testo selezionato: copialo con Ctrl+C."); };
+    try { navigator.clipboard.writeText(text).then(() => toast("Copiato"), fallback); } catch (e) { fallback(); }
+  });
+
+  // ---------- Agenda ----------
+  function renderAgenda() {
+    const withSlot = state.prospects.filter((p) => p.slotDay);
+    $("#days").innerHTML = DAYS.map((d) => {
+      const items = withSlot.filter((p) => p.slotDay === d.key).sort((a, b) => String(a.slotTime || "").localeCompare(String(b.slotTime || "")));
+      const conf = items.filter((p) => CONFIRMED.has(p.status)).length;
+      return '<div class="day"><div class="row" style="justify-content:space-between"><h3>' + esc(d.label) + '</h3><span class="chip ' + (conf ? "good" : "") + '">' + conf + " confermati</span></div>" +
+        '<span class="cap">' + esc(d.note) + " · capacità " + esc(d.cap) + "</span>" +
+        (items.length ? items.map((p) => '<div class="slot" data-id="' + esc(p.id) + '"><span class="mono small">' + esc(p.slotTime || "—") + '</span><span><strong>' + esc(p.name) + "</strong><br><span class=\"small muted\">" + esc(p.slotVenue || "Luogo da definire") + "</span> " + statusChip(p.status) + "</span></div>").join("")
+          : '<span class="small muted">Nessun incontro fissato.</span>') + "</div>";
+    }).join("");
+    $("#days").querySelectorAll(".slot").forEach((el) => el.addEventListener("click", () => openDrawer(el.dataset.id)));
+    const noSlot = state.prospects.filter((p) => CONFIRMED.has(p.status) && !p.slotDay);
+    const noVenue = withSlot.filter((p) => !p.slotVenue);
+    const warn = [];
+    if (noSlot.length) warn.push("Confermati senza giorno: " + noSlot.map((p) => p.name).join(", ") + ".");
+    if (noVenue.length) warn.push("Incontri senza luogo: " + noVenue.map((p) => p.name).join(", ") + ".");
+    $("#agenda-warn").innerHTML = "<h3>Da sistemare</h3>" + (warn.length ? warn.map((w) => '<p class="small">' + esc(w) + "</p>").join("") : '<p class="small muted">Niente da sistemare: ogni incontro confermato ha giorno e luogo.</p>');
+  }
+
+  // ---------- Channels ----------
+  function renderChannels() {
+    $("#channels").innerHTML = CHANNELS.map((c) => '<div class="chan"><div class="stack" style="gap:2px"><div class="row"><strong>' + esc(c.t) + '</strong><span class="seg">' + esc(c.seg) + '</span></div><p class="small muted">' + esc(c.d) + "</p></div>" +
+      '<label class="f">Stato<select data-k="' + c.k + '" id="chan-' + c.k + '">' + opt(CHAN_STATES, state.channels[c.k] || "Da fare") + "</select></label></div>").join("");
+    $("#channels").querySelectorAll("select").forEach((s) => s.addEventListener("change", async () => {
+      if (!state.db) { toast("Database non disponibile: lo stato non viene salvato."); return; }
+      const next = Object.assign({}, state.channels, { [s.dataset.k]: s.value });
+      try { await state.db.doc("meta/channels").set(next); toast("Stato aggiornato"); } catch (e) { toast("Non riesco a salvare lo stato."); }
+    }));
+  }
+
+  // ---------- Export ----------
+  async function initDownloads() {
+    let dl = null;
+    try { dl = await window.claude?.use?.("downloads"); } catch (e) { dl = null; }
+    if (!dl) return;
+    const btn = $("#btn-export"); btn.hidden = false;
+    btn.addEventListener("click", async () => {
+      const cols = ["name", "segment", "priority", "country", "stand", "status", "hook", "nextAction", "slotDay", "slotTime", "slotVenue", "role"];
+      const head = ["Azienda", "Segmento", "Priorità", "Paese", "Stand", "Stato", "Punto di differenza", "Prossima azione", "Giorno", "Ora", "Luogo", "Ruolo referente"];
+      const q = (v) => '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"';
+      const csv = [head.map(q).join(",")].concat(filtered().map((p) => cols.map((c) => q(c === "hook" ? HOOKS[p.hook] || "" : p[c])).join(","))).join("\n");
+      try { await dl.save({ filename: "radar-clienti-verel.csv", data: new Blob(["﻿" + csv], { type: "text/csv" }) }); }
+      catch (e) { toast("Esportazione annullata."); }
+    });
+  }
+
+  // ---------- Data ----------
+  function renderAll() { renderKpis(); renderTable(); fillCompanySelect(); if (state.view === "messaggi") renderMessage(); if (state.view === "agenda") renderAgenda(); }
+  async function initDb() {
+    let db = null;
+    try { db = await window.claude?.use?.("db"); } catch (e) { db = null; }
+    if (!db) {
+      state.loaded = true;
+      const n = $("#db-notice"); n.hidden = false;
+      n.textContent = "Il database condiviso non è disponibile in questa vista: accedi a claude.ai per vedere e aggiornare la pipeline. La qualifica e i messaggi funzionano comunque.";
+      renderAll(); renderChannels(); return;
+    }
+    state.db = db;
+    db.collection("prospects").onSnapshot((snap) => {
+      state.prospects = snap.docs.map((d) => Object.assign({ id: d.id }, d.data()));
+      state.loaded = true;
+      renderAll();
+    }, () => { state.loaded = true; const n = $("#db-notice"); n.hidden = false; n.textContent = "La pipeline non si aggiorna più: ricarica la pagina."; renderAll(); });
+    db.doc("meta/channels").onSnapshot((snap) => { state.channels = snap.exists ? Object.assign({}, snap.data()) : {}; renderChannels(); }, () => {});
+  }
+  renderAll(); renderChannels();
+  initDb(); initSample(); initDownloads();
+})();
+</script>

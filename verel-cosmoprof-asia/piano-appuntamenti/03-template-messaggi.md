@@ -18,7 +18,7 @@ Diego personalizza e invia. I campi `{{...}}` vanno compilati per ogni contatto;
 | Codice | Punto di differenza | Per chi |
 |---|---|---|
 | A | Attivi botanici proprietari + validazione clinica con l'Università di Parma | Brand ingredient-led, derma, clean label (scelta di default) |
-| B | Time to market di 6-8 settimane | Brand con lanci frequenti (es. AXXZIA, Revcell) |
+| B | Time to market di 6-8 settimane. **Sospesa finché Verel non conferma il dato** (domanda C8 in `04`) | Brand con lanci frequenti (es. Revcell) |
 | C | Supporto marketing: trend, prodotti e formule proposti da Verel | Brand piccoli senza R&D interno |
 | D | Made in Italy / prodotto UE per l'export in Europa | Brand APAC che stanno entrando in UE o UK (es. Aesthetics Skincare) |
 

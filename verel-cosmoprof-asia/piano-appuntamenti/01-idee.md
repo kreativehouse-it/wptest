@@ -22,12 +22,14 @@ Altri fatti utili: Cosmoprof Asia apre 9:30-18:30, Cosmopack Asia 10:00-18:00 ([
 
 ---
 
-## 2. Il segmento 2 conta quattro retailer sopra i 500 punti vendita
+## 2. Il segmento 2 conta 12 retailer in priorità A sopra i 500 punti vendita
+
+La ricerca nel Drive (`Verel_APAC_Retailer_Prospects R2`, 22/09) ha qualificato **25 retailer APAC sopra i 500 punti vendita**: 12 A, 9 B, 4 C. La lista completa è in `05-integrazione-drive.md`. La tabella sotto riporta i quattro verificati anche in questa sessione.
 
 | Retailer | Gruppo | Canale | Punti vendita | Fonte | Presenza in fiera 2026 |
 |---|---|---|---|---|---|
 | Watsons | A.S. Watson (CK Hutchison) | Health & beauty / drugstore + farmacia | Oltre 8.000 negozi e 1.500 farmacie a marchio Watsons; gruppo ~17.000. Watsons Malaysia: 888 negozi (ottobre 2026) | [Watsons HK](https://interactive.watsons.com.hk/wearewatsonsen), [Malay Mail](https://www.malaymail.com/news/money/mediaoutreach/2026/10/21/watsons-launches-asias-first-watsons-plus-customer-experience-in-malaysia-setting-a-new-benchmark-for-health-and-beauty-retail/495679) | [Non verificato] (citato come visitatore in edizioni passate) |
-| Mannings (HK/Macao) + Guardian (SEA) | DFI Retail Group (Jardine) | Health & beauty / drugstore | Oltre 1.500 negozi H&B in Asia (dato di gruppo, nessun dato per insegna) | [Jardines](https://jardines.com/our-portfolio/DFI-retail) | [Non verificato] (Mannings citato in passato) |
+| Guardian (SEA) | DFI Retail Group (Jardine) | Health & beauty / drugstore | Oltre 1.100 punti vendita H&B (2024/25, ricerca Drive); gruppo DFI oltre 1.500. **Mannings da solo (HK/Macao) resta sotto i 500**: escluso come Sasa | [Jardines](https://jardines.com/our-portfolio/DFI-retail), ricerca Drive R2 | [Non verificato] |
 | Olive Young | CJ Group | Health & beauty | Oltre 1.350 in Corea (2024, fonte secondaria) | [Daxue Consulting](https://daxueconsulting.com/olive-young-south-korea) | [Non verificato] |
 | Matsumotokiyoshi / Cocokara Fine | MatsukiyoCocokara & Co. | Drugstore + farmacia | 3.493 in Giappone e 82 all'estero (30/06/2025) | [Ryutsuu](https://www.ryutsuu.biz/accounts/r20250814005.html) | [Non verificato] |
 | *Sasa (escluso)* | *Sa Sa International* | *Beauty specialist* | *159 (31/12/2025)* | [Sa Sa](https://doc.irasia.com/listco/hk/sasa/announcement/a260120.pdf) | *Citato in passato* |

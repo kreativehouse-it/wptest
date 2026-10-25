@@ -64,8 +64,9 @@ Regola di uscita: chi risponde "no" o "non ora" esce dalla sequenza e riceve sol
 | Data | Giorno | Chi | Azione | Output atteso |
 |---|---|---|---|---|
 | 26/10 | Lun | E | Risponde alle domande bloccanti di `04` (B1-B6): chi va all'HKCEC, R&D disponibile, Match&Meet, Elite Circle, budget, WhatsApp | Decisioni scritte |
-| 26/10 | Lun | K | Lista A definitiva: 5 Tier 1 + 10 Tier 2 di `verel_cosmoprof_asia_v2.csv` + verifica rapida delle 8 A originali non verificate (Deardot, FICC, FIORESE, JK Cos, SOONNOC, The Skin's, TMC Korea, Moim/Bettura). Obiettivo: 20-25 aziende | Lista A/B con il punto di differenza scelto per ciascuna |
-| 26/10 | Lun | D | Verifica dei nomi su Apollo e Sales Navigator per le Tier 1 (1-3 referenti: founder, R&D, marketing prodotto) | 10-15 contatti verificati |
+| 26/10 | Lun | E | Decide sui 193 esclusi e sugli 86 cambi di priorità del file Drive 03, e sui 4 casi dubbi della lista A (`05-integrazione-drive.md`, sezione 3) | Lista A/B confermata |
+| 26/10 | Lun | K | Lista di lavoro: 21 A del file Drive 05 + B migliori del file 03, con il punto di differenza scelto per ciascuna, caricata nell'app Radar Clienti. Pulizia dei ganci che citano i solari | Lista A/B nell'app |
+| 26/10 | Lun | D | Le 21 A del file 05 hanno già i contatti verificati: Diego li carica in Apollo. Verifica dei nomi su Apollo e Sales Navigator solo per le B (1-3 referenti: founder, R&D, marketing prodotto) | Sequenza A pronta |
 | 26/10 | Lun | E / K | Mail a ICE (ufficio Beni di consumo + ufficio Hong Kong) e all'organizzatore: credenziali Match&Meet, lounge del padiglione all'HKCEC, eventi del Paese ospite, badge HKCEC per il personale Verel | Richieste inviate |
 | 26/10 | Lun | E | Call a Lung Fung: chiede 2-3 presentazioni e il permesso di citarli | Sì / no + nomi |
 | 26/10 | Lun | E | Candidatura all'Elite Circle | Candidatura inviata o "chiusa" |

@@ -23,13 +23,15 @@ Da fare comunque perché costano poco: la candidatura di Eugenio all'**Elite Cir
 | Segmento | Base | Ambizioso | Call dopo la fiera |
 |---|---|---|---|
 | Brand espositori (criteri di Eugenio, A > B) | 8 | 12 | 3-5 |
-| Retailer con ≥500 punti vendita (Watsons, Mannings/Guardian, Olive Young, Matsumotokiyoshi) | 2 | 4 | 1-2 |
+| Retailer con ≥500 punti vendita (12 in priorità A: Watsons, Guardian, Olive Young, MatsukiyoCocokara, Tsuruha–Welcia…) | 2 | 4 | 1-2 |
 | Aziende APAC non espositrici | 1 | 3 | 2-4 |
 | **Totale** | **11** | **19** | **6-11** |
 
 Le stime sono ragionate, non benchmark verificati: le ricontrolliamo il 2/11 (almeno 4 confermati) e il 5/11 (almeno 8).
 
-**Un fatto da sapere:** Sasa ha 159 negozi, sotto la soglia dei 500. Serve una decisione: deroga o esclusione.
+**Due fatti da sapere:** Sasa ha 159 negozi e Mannings da solo resta sotto i 500: serve una decisione, deroga o esclusione. La ricerca nel Drive ha già qualificato 25 retailer sopra soglia, 12 in priorità A, e 21 brand A con contatti verificati (file 05).
+
+**Decisioni sulla lista (dal lavoro nel Drive):** confermare i 193 esclusi e gli 86 cambi di priorità del file 03, e quattro casi dubbi (MALU WILZ nel gruppo ARTDECO, Ultra Violette centrato sui solari, AXXZIA con fabbrica propria, Allies of Skin col founder dimesso).
 
 ## Cosa serve da Verel entro lunedì 26/10
 

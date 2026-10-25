@@ -14,6 +14,16 @@ Ogni domanda indica chi risponde, entro quando e cosa si blocca senza risposta.
 | B5 | **Stato di landing e PDF**: URL definitivo, PDF in inglese pronto, form MailMunch modificabile con il campo slot? | Verel marketing / Kreativehouse | Ogni messaggio (`[LANDING URL]`) | Se non pronta entro il 27/10: email senza link, slot proposti in risposta |
 | B6 | **Numero e posizione dello stand** nella collettiva italiana all'AWE | Verel / ICE | Messaggi del segmento 2, materiali | "Italian Pavilion, Cosmopack Asia, AsiaWorld-Expo" |
 
+### Decisioni sulla lista dal lavoro nel Drive (entro il 26/10, Eugenio)
+
+| # | Domanda | Dove |
+|---|---|---|
+| D1 | Conferma dei **193 esclusi** (colonna "Decisione Eugenio" vuota) | File Drive 03, foglio "Esclusi" |
+| D2 | Conferma degli **86 cambi di priorità** proposti dalle ricerche del 25-28/09 | File Drive 03, foglio "Cambi priorità" |
+| D3 | **MALU WILZ** fa parte del gruppo ARTDECO: resta in A o esce come "grande gruppo"? | `05-integrazione-drive.md`, sezione 3 |
+| D4 | **Ultra Violette** è un brand centrato sui solari: C o proposta solo non SPF? | Idem |
+| D5 | **AXXZIA**: esclusa (fabbrica propria), come dice il Drive? | Idem |
+
 ## 2. Domande sui contenuti (entro il 28/10)
 
 | # | Domanda | Chi | Perché serve |
@@ -25,6 +35,7 @@ Ogni domanda indica chi risponde, entro quando e cosa si blocca senza risposta.
 | C5 | **MOQ e tempi** citabili | Produzione / commerciale | Risposta pronta n. 3 in `03` |
 | C6 | Verel supporta i clienti su **dossier regolatorio UE** (PIF, notifica CPNP)? Se sì, è un aggancio forte per la variante D **[Inferenza]** | R&D / regolatorio | Variante D, brand APAC che vanno in UE |
 | C7 | Lung Fung: **chi tiene la relazione**, e possiamo citarli come cliente? | Eugenio | Idea P7 |
+| C8 | Il **time to market di 6-8 settimane** si può usare nei messaggi? La ricerca retailer del Drive lo segnala come ipotesi da validare | Produzione / R&D | Variante B dei template, sospesa |
 
 ## 3. Domande sul segmento retailer (entro il 28/10)
 
