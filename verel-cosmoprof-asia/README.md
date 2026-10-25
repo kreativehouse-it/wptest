@@ -20,3 +20,11 @@ Leggi verel-cosmoprof-asia/README.md e verel_cosmoprof_asia_v2.csv, poi:
    Moim/Bettura; poi Dr.SANTE, Wakan, Lindsay & Cos, Celebon, Corelix, Repit.
 3. Per ogni dato: valore, anno, URL, confidenza (alta = bilancio, media = portale/stampa, bassa = dichiarato). Niente stime.
 4. Salva verel_cosmoprof_asia_v3.csv con una sintesi delle variazioni. Lavora a lotti di 10 e controlla il consumo delle ricerche.
+
+## Piano appuntamenti Hong Kong (25/10/2026)
+Cartella `piano-appuntamenti/`:
+- `00-sintesi-eugenio.md`: una pagina, le 5 idee, gli obiettivi, cosa serve da Verel.
+- `01-idee.md`: fatti verificati con fonti, 27 idee con scheda di valutazione, ranking, adattamenti APAC dei criteri.
+- `02-piano-giorno-per-giorno.md`: slot, sequenze per segmento, calendario 26/10-20/11, obiettivi e checkpoint.
+- `03-template-messaggi.md`: email e LinkedIn in inglese per segmento, varianti per punto di differenza.
+- `04-domande-aperte.md`: decisioni bloccanti, contenuti, retailer, budget, domande per organizzatore e ICE.
